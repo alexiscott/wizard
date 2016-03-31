@@ -1,3 +1,31 @@
+
+// Data
+
+var bp_wizard_sections = {
+  section1: {
+    color: "#FCC",
+    icon: "foo.jpg",
+    jurisdiction: "Information about Jurisdiction",
+    title: "1/ Register your business"
+  },
+  section2: {
+    color: "#FFC",
+    icon: "foo.jpg",
+    jurisdiction: "More Information about Jurisdiction",
+    title: "2/ Name your business"
+  }
+}
+
+
+var bp_wizard_data = {
+  screen1: {
+    intro: "Registering your business with the City of Los Angeles will allow you to conduct business within the city limits. First, let's check to see if you need to register as a business.",
+    color: bp_wizard_sections.section1.color
+  }
+  
+}
+
+
 var namespace = {};
 
 // wizard.js Wizard view.
@@ -19,17 +47,13 @@ namespace.ui.Wizard = Backbone.View.extend({
   },
 
   render: function() {
-    console.log("render happens");
-//    var t = template('ui/wizard');
-//    $(this.el).html("REPLACE ME dynamic");
-    
     this.progressIndicator = $("#progress_indicator");
+    this.section_title = $("h1#section_title");
     this.title = $("h2#step_title");
     this.instructions = $("p#step_instructions");
     this.currentStepContainer = $(".current_step_container");
     this.nextStepButton = $("#next_step_button");
     this.prevStepButton = $("#prev_step_button");
-    
     this.renderCurrentStep();
     return this;
     
@@ -53,6 +77,7 @@ namespace.ui.Wizard = Backbone.View.extend({
 
     this.title.html(currentStep.title);
     this.instructions.html(currentStep.instructions);
+    this.section_title.html(currentStep.section_title);
     this.currentView = currentStep.view;
     console.log("current view", this.currentView);
     console.log("current step container", this.currentStepContainer);
@@ -95,21 +120,16 @@ namespace.ui.Wizard = Backbone.View.extend({
     if (!this.isFirstStep()) {
       this.currentStep -= 1;
       this.renderCurrentStep();
-      
     };
-    
   },
   
   isFirstStep: function() {
     return (this.currentStep == 0);
-    
   },
   
   isLastStep: function() {
     return (this.currentStep == this.options.steps.length - 1);
-    
   }
-  
 });
 
 
@@ -122,13 +142,10 @@ var MyModel = Backbone.Model.extend({});
 
 // Views.
 namespace.views.WizardStepOne = Backbone.View.extend({
-  // It's the first function called when this view it's instantiated.
   el: ".current_step_container",
   initialize: function(){
     this.render();  
   },
-  // $el - it's a cached jQuery object (el), in which you can use jQuery functions
-  //       to push content. Like the Hello World in this case.
   render: function(){
     this.$el.html("I am screen one specific"); 
   }
@@ -173,13 +190,15 @@ namespace.views.MyWizard = Backbone.View.extend({
     var steps = [
       {
         step_number :       1,
+        section_title:     bp_wizard_sections.section1.title,
         title :             "Title of Step 1",
-        instructions :      "Instructions or description of what the user needs to do for this step",
+        instructions :     bp_wizard_data.screen1,
         view :              new namespace.views.WizardStepOne({ model : myModel })
         
       },
       {
         step_number :       2,
+        section_title:     bp_wizard_sections.section1.title,
         title :             "Title of Step 2",
         instructions :      "Instructions or description of what the user needs to do for this step",
         view :              new namespace.views.WizardStepTwo({ model : myModel })
@@ -188,6 +207,7 @@ namespace.views.MyWizard = Backbone.View.extend({
       {
         step_number :       3,
         title :             "Title of Step 3",
+        section_title:     bp_wizard_sections.section2.title,
         instructions :      "Instructions or description of what the user needs to do for this step",
         view :              new namespace.views.WizardStepThree({ model : myModel })
         
