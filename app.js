@@ -1,5 +1,9 @@
 
-// Data
+
+
+//////////
+// DATA //
+//////////
 
 var bp_wizard_sections = {
   section1: {
@@ -20,17 +24,20 @@ var bp_wizard_sections = {
 var bp_wizard_data = {
   screen1: {
     intro: "Registering your business with the City of Los Angeles will allow you to conduct business within the city limits. First, let's check to see if you need to register as a business.",
-    color: bp_wizard_sections.section1.color
-  }
-  
+    color: bp_wizard_sections.section1.color,
+    buttonTitle: "I am a button title"
+  }  
 }
 
 
 var namespace = {};
 
-// wizard.js Wizard view.
-namespace.ui = {};
 
+/////////////////
+// WIZARD VIEW //
+/////////////////
+
+namespace.ui = {};
 namespace.ui.Wizard = Backbone.View.extend({  
   id: 'wizard',
   el: '#wizard',
@@ -43,7 +50,6 @@ namespace.ui.Wizard = Backbone.View.extend({
     this.options = options || {};
     _.bindAll(this, 'render');
     this.currentStep = 0;
-    console.log("wizard", this.el);
   },
 
   render: function() {
@@ -82,38 +88,31 @@ namespace.ui.Wizard = Backbone.View.extend({
     console.log("current view", this.currentView);
     console.log("current step container", this.currentStepContainer);
     this.currentStepContainer.html(this.currentView.render());
-//    this.currentStepContainer.html("stuff"); // AIS
 
     this.renderProgressIndicator();
     
     if (prevStep) {
-      this.prevStepButton.html("Prev: " + prevStep.title).show()
-      
+      this.prevStepButton.html("<<").show()
     } else {
       this.prevStepButton.hide();
-      
     };
     if (nextStep) {
-      this.nextStepButton.html("Next: " + nextStep.title);
-      
+      this.nextStepButton.html(">>");
     } else {
       this.nextStepButton.html("Finish");
-      
     };
-    
   },
   
   nextStep: function() {
-    console.log("clicked on next step");
-//    if (this.currentView.validate()) {
-      if (!this.isLastStep()) {
- //       this.currentView.validate();
-        this.currentStep += 1;
-        this.renderCurrentStep();
-      } else {
-   //     this.save();
-      };
-//    };
+    //    if (this.currentView.validate()) {
+    if (!this.isLastStep()) {
+      //       this.currentView.validate();
+      this.currentStep += 1;
+      this.renderCurrentStep();
+    } else {
+      //     this.save();
+    };
+    //    };
   },
   
   prevStep: function() {
@@ -139,8 +138,10 @@ namespace.ui.Wizard = Backbone.View.extend({
 namespace.views = {};
 var MyModel = Backbone.Model.extend({});
 
+///////////////////////
+// WIZARD STEP VIEWS //
+///////////////////////
 
-// Views.
 namespace.views.WizardStepOne = Backbone.View.extend({
   el: ".current_step_container",
   initialize: function(){
