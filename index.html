@@ -12,12 +12,29 @@
 
   <div id="container">Foo</div>
 
+  <div id="wizard">
+    <header>
+      <div id="progress_indicator"></div>
+      <h2 id="step_title"></h2>
+      <p id="step_instructions"></p>
+    </header>
+    <div class="current_step_container"></div>
+    <footer>
+      <div id="buttons">
+        <a id="prev_step_button" class="button">Prev:</a>
+        <a id="next_step_button" class="button">Next:</a>
+      </div>
+    </footer>
+  </div>
+
+
   <!-- ========= -->
   <!-- Libraries -->
   <!-- ========= -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
   <script src="libs/underscore.js" type="text/javascript"></script>
   <script src="libs/backbone.js" type="text/javascript"></script>
+  <script src="app.js" type="text/javascript"></script>
 
   
   <!-- =============== -->
@@ -26,26 +43,7 @@
   <script type="text/javascript">
     // your JS code goes here
 
-    var AppView = Backbone.View.extend({
-      // el - stands for element. Every view has a element associate in with HTML
-      //      content will be rendered.
-      el: '#container',
-      // It's the first function called when this view it's instantiated.
-      initialize: function(){
-        this.render();
-      
-},
-      // $el - it's a cached jQuery object (el), in which you can use jQuery functions
-      //       to push content. Like the Hello World in this case.
-      render: function(){
-        this.$el.html("Hello World");
-      
-}
-   
 
-});
-
-var appView = new AppView();
   </script>
   
 </body>
