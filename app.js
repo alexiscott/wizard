@@ -39,8 +39,8 @@ namespace.ui.Wizard = Backbone.View.extend({
     this.progressIndicator.empty();
     _.each(this.options.steps, _.bind(function(step) {
       var text =  "(" + step.step_number + ") " + step.title + ">>> ";
-//      var el = this.make('span', {}, text);
-      var el = "<span>FOOBAR GRAB TEXT</span>";
+      var el = document.createElement('span');
+      $(el).text(text);
       if (step.step_number == this.currentStep + 1) $(el).addClass('active');
       this.progressIndicator.append(el);
     }, this));
@@ -56,8 +56,8 @@ namespace.ui.Wizard = Backbone.View.extend({
     this.currentView = currentStep.view;
     console.log("current view", this.currentView);
     console.log("current step container", this.currentStepContainer);
-//    this.currentStepContainer.html(this.currentView.render().el);
-    this.currentStepContainer.html("stuff"); // AIS
+    this.currentStepContainer.html(this.currentView.render());
+//    this.currentStepContainer.html("stuff"); // AIS
 
     this.renderProgressIndicator();
     
@@ -86,7 +86,7 @@ namespace.ui.Wizard = Backbone.View.extend({
         this.currentStep += 1;
         this.renderCurrentStep();
       } else {
-        this.save();
+   //     this.save();
       };
 //    };
   },
@@ -122,52 +122,44 @@ var MyModel = Backbone.Model.extend({});
 
 // Views.
 namespace.views.WizardStepOne = Backbone.View.extend({
-  el: '#container',
   // It's the first function called when this view it's instantiated.
+  el: ".current_step_container",
   initialize: function(){
     this.render();  
   },
   // $el - it's a cached jQuery object (el), in which you can use jQuery functions
   //       to push content. Like the Hello World in this case.
   render: function(){
-    this.$el.html("Hello World again"); 
+    this.$el.html("I am screen one specific"); 
   }
 });
 
 
 namespace.views.WizardStepTwo = Backbone.View.extend({
-  el: '#container',
-  // It's the first function called when this view it's instantiated.
+  el: ".current_step_container",
   initialize: function(){
     this.render();  
   },
-  // $el - it's a cached jQuery object (el), in which you can use jQuery functions
-  //       to push content. Like the Hello World in this case.
   render: function(){
-    this.$el.html("Hello World 2"); 
+    this.$el.html("I am screen two specific"); 
   }
 });
 
 namespace.views.WizardStepThree = Backbone.View.extend({
-  el: '#container',
+  el: ".current_step_container",
   // It's the first function called when this view it's instantiated.
   initialize: function(){
     this.render();  
   },
-  // $el - it's a cached jQuery object (el), in which you can use jQuery functions
-  //       to push content. Like the Hello World in this case.
   render: function(){
-    this.$el.html("Hello World 3"); 
+    this.$el.html("I am screen 3 specific"); 
   }
 });
-
-
 
 
 namespace.views.MyWizard = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render', 'wizardMethod');    
-    console.log("initialized;", this);
     this.render();
   },
 
@@ -213,32 +205,6 @@ namespace.views.MyWizard = Backbone.View.extend({
   }});
 
 
-console.log("initialize");
-var fooView = new namespace.views.MyWizard ();
+// Initialize.
+var myWizard = new namespace.views.MyWizard ();
 
-
-
-
-
-
-
-// Misc
-
-var AppView = Backbone.View.extend({
-  // el - stands for element. Every view has a element associate in with HTML
-  //      content will be rendered.
-  el: '#container',
-  // It's the first function called when this view it's instantiated.
-  initialize: function(){
-    this.render();
-    
-  },
-  // $el - it's a cached jQuery object (el), in which you can use jQuery functions
-  //       to push content. Like the Hello World in this case.
-  render: function(){
-    this.$el.html("Hello Basic");
-    
-  }
-});
-
-//var appView = new AppView();
