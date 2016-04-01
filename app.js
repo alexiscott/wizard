@@ -1,69 +1,4 @@
-
-
-
-//////////
-// DATA //
-//////////
-
-var bp_wizard_sections = {
-  section1: {
-    color: "#FCC",
-    icon: "foo.jpg",
-    jurisdiction: "Information about Jurisdiction",
-    title: "1/ Register your business"
-  },
-  section2: {
-    color: "#FFC",
-    icon: "foo.jpg",
-    jurisdiction: "More Information about Jurisdiction",
-    title: "2/ Name your business"
-  }
-}
-
-
-var bp_wizard_data = 
-  [
-    {
-    screenId: 0, 
-    screenTitle: "Title of Screen",
-    screenDescription: "Screen description",
-    section: 123,
-    buttons: [
-      {
-        buttonTitle: "Yes",
-        buttonResult: "Bad choice",
-        buttonLinkTo: 0
-      },
-      {
-        buttonTitle: "No",
-        buttonResult: "Better choice",
-        buttonLinkTo: 1
-      },
-    ]
-  },
-    {
-    screenId: 1, 
-    screenTitle: "2 Title of Screen",
-    screenDescription: "2 Screen description",
-    section: 123,
-    buttons: [
-      {
-        buttonTitle: "2 Yes",
-        buttonResult: "2 Bad choice",
-        buttonLinkTo: 0
-      },
-      {
-        buttonTitle: "2 No",
-        buttonResult: "2 Better choice",
-        buttonLinkTo: 1
-      },
-    ]
-  }
-  ];
-
-
 var namespace = {};
-
 
 /////////////////
 // WIZARD VIEW //
@@ -74,8 +9,8 @@ namespace.ui.Wizard = Backbone.View.extend({
   id: 'wizard',
   el: '#wizard',
   events: {
-    "click #next_step_button" : "nextStep",
-    "click #prev_step_button" : "prevStep"
+    "click #next-step" : "nextStep",
+    "click #prev-step" : "prevStep"
   },
   
   initialize: function(options) {
@@ -85,13 +20,12 @@ namespace.ui.Wizard = Backbone.View.extend({
   },
 
   render: function() {
-    this.progressIndicator = $("#progress_indicator");
-    this.section_title = $("h1#section_title");
-    this.title = $("h2#step_title");
-    this.instructions = $("p#step_instructions");
-    this.currentStepContainer = $(".current_step_container");
-    this.nextStepButton = $("#next_step_button");
-    this.prevStepButton = $("#prev_step_button");
+    this.progressIndicator = $("#progress-indicator");
+    this.sectionTitle = $("h1#section-title");
+    this.stepTitle = $("h2#step-title");
+    this.stepDescription = $("p#step-instructions");
+    this.nextStepButton = $("#next-step");
+    this.prevStepButton = $("#prev-step");
     this.renderCurrentStep();
     return this;
   },
@@ -99,7 +33,7 @@ namespace.ui.Wizard = Backbone.View.extend({
   renderProgressIndicator: function() {
     this.progressIndicator.empty();
     _.each(this.options.steps, _.bind(function(step) {
-      var text =  "(" + step.step_number + ") " + step.title + ">>> ";
+      var text =  "(" + step.step_number + ") " + step.section_title + ">>> ";
       var el = document.createElement('span');
       $(el).text(text);
       if (step.step_number == this.currentStep + 1) $(el).addClass('active');
@@ -111,15 +45,10 @@ namespace.ui.Wizard = Backbone.View.extend({
     var currentStep = this.options.steps[this.currentStep];
     if (!this.isFirstStep()) var prevStep = this.options.steps[this.currentStep - 1];
     var nextStep = this.options.steps[this.currentStep + 1];
-
-    this.title.html(currentStep.title);
-    this.instructions.html(currentStep.instructions);
-    this.section_title.html(currentStep.section_title);
+    this.sectionTitle.html(currentStep.section_title);
+    this.stepTitle.html(currentStep.screen_title);
+    this.stepDescription.html(currentStep.screen_description);
     this.currentView = currentStep.view;
-    console.log("current view", this.currentView);
-    console.log("current step container", this.currentStepContainer);
-    this.currentStepContainer.html(this.currentView.render());
-
     this.renderProgressIndicator();
     
     if (prevStep) {
@@ -167,29 +96,29 @@ namespace.ui.Wizard = Backbone.View.extend({
 
 // backbone view that calls the wizard ui element
 namespace.views = {};
-var MyModel = Backbone.Model.extend({
-   defaults: {
-     buttonTitle: 'button Title Default'
-   }
-});
 
 ///////////////////////
 // WIZARD STEP VIEWS //
 ///////////////////////
 
 namespace.views.WizardStepOne = Backbone.View.extend({
-  el: ".current_step_container",
+  el: "#current-step-container",
   initialize: function(){
     this.render();  
   },
   render: function(){
-    var result = this.model.get("screenTitle");
-    console.log("RESULT:", result);
-    this.$el.html(result); 
+    // Buttons render here.
+    var buttons = this.model.get("buttons");
+    var button_html = '';
+     _.each(buttons, function(button) {
+       var compiled = _.template('<a href=""><%= title %></a>');
+       button_html = button_html + compiled({title: button.buttonTitle});
+    });
+    this.$el.html(button_html);
   }
 });
 
-
+  // Model construction.
 namespace.views.MyWizard = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render', 'wizardMethod');    
@@ -202,33 +131,35 @@ namespace.views.MyWizard = Backbone.View.extend({
   },
 
   wizardMethod: function() {
-    var steps = _.map(bp_wizard_data, function(obj) {
 
-      var myModel = new MyModel({
+    var Screen = Backbone.Model.extend({
+      defaults: {
+        foobar: 'Foobar'
+      }
+    });
+
+    var steps = _.map(bp_wizard_data, function(obj, index) {
+
+      var screen = new Screen({
         screenId: obj.screenId,
-        screenTitle: obj.screenTitle
+        buttons: obj.buttons
       });
 
       return {
-        step_number :       1,
-        section_title:      "STATIC SECTION TITLE",
-        title :             "Title of Step 1",
-        instructions :     "STATIC INSTRUCTIONS",
-        view :              new namespace.views.WizardStepOne({ model : myModel })
+        step_number:             index + 1,
+        section_title:            obj.sectionTitle,
+        screen_title:             obj.screenTitle,
+        screen_description:       obj.screenDescription,
+        view :                    new namespace.views.WizardStepOne({ model : screen })
       }
-
     });
-
-
     console.log("Steps: ", steps);
-
 
     var view = new namespace.ui.Wizard({ 
       steps : steps 
     });
+
     $("#current_step").html(view.render().el);
-    console.log("render current step");
-    
   }});
 
 
