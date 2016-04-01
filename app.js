@@ -108,15 +108,47 @@ namespace.views.WizardStepOne = Backbone.View.extend({
   },
   render: function(){
     // Buttons render here.
-    var buttons = this.model.get("buttons");
-    var button_html = '';
-     _.each(buttons, function(button) {
-       var compiled = _.template('<a href=""><%= title %></a>');
-       button_html = button_html + compiled({title: button.buttonTitle});
-    });
-    this.$el.html(button_html);
+    var buttonsView = new ButtonsView({ el: '#buttons', model: this.model });
   }
 });
+
+
+var ButtonsView = Backbone.View.extend({
+
+  initialize: function() {
+    this.render();
+  },
+
+  events: {
+    "click .but": "transitionUp",
+    "click .but": "tranistionDown",
+},
+
+  transitionUp: function() {
+    console.log("Transition up");
+    event.preventDefault();
+},
+
+  tranistionDown: function() {
+    console.log("Transition down");
+    event.preventDefault();
+  },
+
+  render: function() {
+    // Move loop into parent function.
+    var buttons = this.model.get("buttons");
+    var b = '';
+     _.each(buttons, function(button) {
+       var compiled = _.template('<a href="" class="but"><%= title %></a>');
+       b = b + compiled({title: button.buttonTitle});
+    });
+    console.log(this);
+    $(this.el).html(b);
+  }
+});
+
+
+
 
   // Model construction.
 namespace.views.MyWizard = Backbone.View.extend({
