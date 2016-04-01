@@ -21,13 +21,45 @@ var bp_wizard_sections = {
 }
 
 
-var bp_wizard_data = {
-  screen1: {
-    intro: "Registering your business with the City of Los Angeles will allow you to conduct business within the city limits. First, let's check to see if you need to register as a business.",
-    color: bp_wizard_sections.section1.color,
-    buttonTitle: "I am a button title"
-  }  
-}
+var bp_wizard_data = 
+  [
+    {
+    screenId: 0, 
+    screenTitle: "Title of Screen",
+    screenDescription: "Screen description",
+    section: 123,
+    buttons: [
+      {
+        buttonTitle: "Yes",
+        buttonResult: "Bad choice",
+        buttonLinkTo: 0
+      },
+      {
+        buttonTitle: "No",
+        buttonResult: "Better choice",
+        buttonLinkTo: 1
+      },
+    ]
+  },
+    {
+    screenId: 1, 
+    screenTitle: "2 Title of Screen",
+    screenDescription: "2 Screen description",
+    section: 123,
+    buttons: [
+      {
+        buttonTitle: "2 Yes",
+        buttonResult: "2 Bad choice",
+        buttonLinkTo: 0
+      },
+      {
+        buttonTitle: "2 No",
+        buttonResult: "2 Better choice",
+        buttonLinkTo: 1
+      },
+    ]
+  }
+  ];
 
 
 var namespace = {};
@@ -62,7 +94,6 @@ namespace.ui.Wizard = Backbone.View.extend({
     this.prevStepButton = $("#prev_step_button");
     this.renderCurrentStep();
     return this;
-    
   },
   
   renderProgressIndicator: function() {
@@ -136,7 +167,11 @@ namespace.ui.Wizard = Backbone.View.extend({
 
 // backbone view that calls the wizard ui element
 namespace.views = {};
-var MyModel = Backbone.Model.extend({});
+var MyModel = Backbone.Model.extend({
+   defaults: {
+     buttonTitle: 'button Title Default'
+   }
+});
 
 ///////////////////////
 // WIZARD STEP VIEWS //
@@ -148,29 +183,9 @@ namespace.views.WizardStepOne = Backbone.View.extend({
     this.render();  
   },
   render: function(){
-    this.$el.html("I am screen one specific"); 
-  }
-});
-
-
-namespace.views.WizardStepTwo = Backbone.View.extend({
-  el: ".current_step_container",
-  initialize: function(){
-    this.render();  
-  },
-  render: function(){
-    this.$el.html("I am screen two specific"); 
-  }
-});
-
-namespace.views.WizardStepThree = Backbone.View.extend({
-  el: ".current_step_container",
-  // It's the first function called when this view it's instantiated.
-  initialize: function(){
-    this.render();  
-  },
-  render: function(){
-    this.$el.html("I am screen 3 specific"); 
+    var result = this.model.get("screenTitle");
+    console.log("RESULT:", result);
+    this.$el.html(result); 
   }
 });
 
@@ -187,37 +202,28 @@ namespace.views.MyWizard = Backbone.View.extend({
   },
 
   wizardMethod: function() {
-    var myModel = new MyModel;
-    var steps = [
-      {
+    var steps = _.map(bp_wizard_data, function(obj) {
+
+      var myModel = new MyModel({
+        screenId: obj.screenId,
+        screenTitle: obj.screenTitle
+      });
+
+      return {
         step_number :       1,
-        section_title:     bp_wizard_sections.section1.title,
+        section_title:      "STATIC SECTION TITLE",
         title :             "Title of Step 1",
-        instructions :     bp_wizard_data.screen1,
+        instructions :     "STATIC INSTRUCTIONS",
         view :              new namespace.views.WizardStepOne({ model : myModel })
-        
-      },
-      {
-        step_number :       2,
-        section_title:     bp_wizard_sections.section1.title,
-        title :             "Title of Step 2",
-        instructions :      "Instructions or description of what the user needs to do for this step",
-        view :              new namespace.views.WizardStepTwo({ model : myModel })
-        
-      },
-      {
-        step_number :       3,
-        title :             "Title of Step 3",
-        section_title:     bp_wizard_sections.section2.title,
-        instructions :      "Instructions or description of what the user needs to do for this step",
-        view :              new namespace.views.WizardStepThree({ model : myModel })
-        
       }
-      
-    ];
-    
+
+    });
+
+
+    console.log("Steps: ", steps);
+
+
     var view = new namespace.ui.Wizard({ 
-      model : myModel, 
       steps : steps 
     });
     $("#current_step").html(view.render().el);
