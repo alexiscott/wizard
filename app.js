@@ -45,6 +45,7 @@ namespace.ui.Wizard = Backbone.View.extend({
     var currentStep = this.options.steps[this.currentStep];
     if (!this.isFirstStep()) var prevStep = this.options.steps[this.currentStep - 1];
     var nextStep = this.options.steps[this.currentStep + 1];
+
     this.sectionTitle.html(currentStep.section_title);
     this.stepTitle.html(currentStep.screen_title);
     this.stepDescription.html(currentStep.screen_description);
@@ -73,6 +74,11 @@ namespace.ui.Wizard = Backbone.View.extend({
       //     this.save();
     };
     //    };
+  },
+
+  goToStep: function() {
+      this.currentStep = 1; // AIS.
+      this.renderCurrentStep();
   },
   
   prevStep: function() {
@@ -131,6 +137,8 @@ var ButtonsView = Backbone.View.extend({
 
   tranistionDown: function() {
     console.log("Transition down");
+    this.model.set({selected: true});
+    console.log("sel: ", this.model.get('selected'));
     event.preventDefault();
   },
 
@@ -139,7 +147,7 @@ var ButtonsView = Backbone.View.extend({
     var buttons = this.model.get("buttons");
     var b = '';
      _.each(buttons, function(button) {
-       var compiled = _.template('<a href="" class="but"><%= title %></a>');
+       var compiled = _.template('<a href="" class="but button"><%= title %></a>');
        b = b + compiled({title: button.buttonTitle});
     });
     console.log(this);
@@ -166,7 +174,7 @@ namespace.views.MyWizard = Backbone.View.extend({
 
     var Screen = Backbone.Model.extend({
       defaults: {
-        foobar: 'Foobar'
+        selected: false
       }
     });
 
@@ -185,7 +193,7 @@ namespace.views.MyWizard = Backbone.View.extend({
         view :                    new namespace.views.WizardStepOne({ model : screen })
       }
     });
-    console.log("Steps: ", steps);
+    //    console.log("Steps: ", steps);
 
     var view = new namespace.ui.Wizard({ 
       steps : steps 
