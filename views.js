@@ -75,3 +75,28 @@ namespace.views.ButtonView = Backbone.View.extend({
     return this;
   }
 });
+
+
+namespace.views.Nav = Backbone.View.extend({
+  el: ".wizard__nav",
+  
+  events:  {
+    "click .wizard__arrow-up": "arrowClick",
+    "click .wizard__arrow-down--filled": "arrowClick"
+  },
+
+  initialize: function() {
+    this.render();
+  },
+  
+  arrowClick: function(e) {
+    console.log(e.currentTarget);
+  },
+
+  render: function() {
+//    this.$el.html("NAV");
+  }
+
+});
+
+var nav = new namespace.views.Nav();
