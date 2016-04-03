@@ -100,3 +100,6 @@ namespace.views.Nav = Backbone.View.extend({
 });
 
 var nav = new namespace.views.Nav();
+
+//console.log("FIND", namespace.collections.screens.find({id: 4}));
+new namespace.views.wizard({ model : namespace.collections.screens.find({id: 4}) });
