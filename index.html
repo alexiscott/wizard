@@ -16,6 +16,98 @@
     padding: 5px 20px;
     border: 1px solid black;
     }
+    .wizard__content-block {
+    display: inline-block;
+    border: 0 solid black;
+    width: 70%;
+    padding: 25px;
+    }
+    .wizard__header {
+    font-weight: 700;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0;
+    margin: 0 0 15px;
+    }
+
+.wizard__header--intro {
+  font-weight: 700;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 0;
+  padding: 0;
+  margin: 0 0 15px;
+}
+
+.wizard__question {
+  font-weight: 400;
+  font-size: 1.667em;
+}
+
+.wizard__buttons {
+  border: 0 solid white;
+
+}
+.wizard__button {
+  background-color: white;
+  padding: 8px 30px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 0 10px 0 0;
+
+}
+.wizard__button {
+    @include border-radius(20px);
+    padding: 8px 35px 8px 35px;
+    font-weight: bold;
+    display: inline-block;
+    margin: 0 10px 0 0;
+    cursor: pointer;
+}
+.wizard__button a {
+  color: $wizard_text;
+  text-decoration: none;
+
+}
+.wizard__button--selected {
+  @include wizard__button--base;
+  background-color: $wizard__button--selected;
+
+}
+.wizard__button--selected a {
+  text-decoration: none;
+  color: $wizard__button_text--selected;
+
+}
+
+.wizard__nav {
+  display: inline-block;
+  width: 70%;
+  float: left;
+
+}
+.wizard__arrow-up {
+  background-image: image-url("arrow_up.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin: 0 10px 0 24px;
+  width: 24px;
+  height: 25px;
+
+}
+.wizard__arrow-down--filled {
+  background-image: image-url("arrow_down_filled.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 320px;
+  height: 94px;
+  margin-top: 5px;
+
+}
+
+
     </style>
 </head>
 <body>
@@ -24,19 +116,21 @@
   <!-- ========= -->
 
 
-  <div id="wizard">
-    <h1 id="section-title"></h1> 
+  <div id="wizard" class="wizard">
+    <div class="wizard__header">
+      <div class="wizard__header--intro">
+      </div>        
+    </div>
+    <hr class="wizard__header-line" />
     <span class="burger"></span>
     <div class="step-wrapper">
       <div id="step-data">
         <h2 id="step-title"></h2>
-        <p id="step-instructions"></p>
-        <div id="buttons"></div>
       </div>
       <div id="current-step-container"></div>
-      <div id="nav">
-        <a id="prev-step" class="button"><</a>
-        <a id="next-step" class="button">></a>
+      <div class="wizard__buttons"></div>
+      <div class="wizard__nav">
+        ADD ME.
       </div>
     </div> <!-- Close current step container -->
     <div id="progress-indicator"></div>
