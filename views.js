@@ -34,9 +34,8 @@ namespace.views.ButtonsView = Backbone.View.extend({
   render: function() {
     var buttons = this.model.get("buttons");
     var that = this;
-
-     _.each(buttons, function(button) {
-      var view =  new namespace.views.ButtonView({model: button});
+     _.each(buttons, function(b) {
+       var view =  new namespace.views.ButtonView({button: b});
        that.$el.append(view.render().el);
     });
     return this;
@@ -47,26 +46,32 @@ namespace.views.ButtonsView = Backbone.View.extend({
 namespace.views.ButtonView = Backbone.View.extend({
   tagName: "div",
 
-  className: "changeme",
+  selected: false,
+
+  nextSlide: 0,
+
+  className: "buttons",
+  initialize: function(options) {
+    this.options = options || {};
+    this.button = this.options.button;
+  },
 
   events: {
-    "click .wizard__button": "transitionUp",
-    "click .wizard__button": "tranistionDown",
+    "click .wizard__button": "markSelected"
   },
 
-  transitionUp: function() {
-    console.log("Transition up");
+  markSelected: function() {
+  //  console.log("Mark selected", this);
+    this.selected = true;
+   this.nextSlide = this.button.buttonLinkTo;
+    console.log("THIS", this.nextSlide);
     event.preventDefault();
-    this.model.set({selected: true});
 },
 
-  buttonTemplate: _.template('<a href="{{id}}" class="wizard__button">{{title}}</a>'),
-  initialize: function() {
-    this.render();
-  },
+  buttonTemplate: _.template('<a href="{{id}}" class="wizard__button button">{{title}}</a>'),
 
   render: function() {
-    this.$el.html(this.buttonTemplate({title: this.model.buttonTitle, id: this.model.id}));
+    this.$el.html(this.buttonTemplate({title: this.button.buttonTitle, id: this.button.id}));
     return this;
   }
 });
