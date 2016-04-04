@@ -11,12 +11,17 @@ _.templateSettings = {
 // Wizard //
 ////////////
 
-namespace.views.wizard = Backbone.View.extend({
-  el: "#current-step-container",
+namespace.views.Wizard = Backbone.View.extend({
+
+  tagName: 'li',
 
   selected: false,
 
-  nextSlide: 0,
+  nextScreen: 0,
+
+  setNextScreen: function(screenId) {
+    this.nextScreen = screenId;
+  },
 
   initialize: function(){
     this.render();
@@ -103,19 +108,28 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   arrowClick: function(e) {
+    namespace.views.wizard.setNextScreen(3);
     console.log("Event target:", e.currentTarget);
-    console.log(namespace.views.wizard.nextScreen);
+    console.log("next scr:", namespace.views.wizard.nextScreen);
     this.render(namespace.views.wizard.nextScreen);
   },
 
   render: function(slideId) {
 //    this.$el.html("NAV");
     //console.log("FIND", namespace.collections.screens.find({id: 4}));
-    namespace.views.wiz.remove();
-   namespace.views.wiz.unbind();
-   var newScreen =  namespace.collections.screens.find({id: slideId}) 
+
+    // Remove el 
+    namespace.views.wizard.remove();
+
+    console.log("slide", slideId);
+    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: 4}) });
+
+$(".c").append(namespace.views.wizard.render().el);
+
+   // namespace.views.wiz.unbind();
+//   var newScreen =  namespace.collections.screens.find({id: slideId}) 
     console.log("new Screen: ", this.model);
-   var w = new namespace.views.wizard({ model : newScreen});
+//   var w = new namespace.views.wizard({ model : newScreen});
 //    var foo =  namespace.views.wizard({ model : namespace.collections.screens.first() });
 //    console.log("foo", foo);
   }
