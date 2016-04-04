@@ -13,7 +13,7 @@ _.templateSettings = {
 
 namespace.views.Wizard = Backbone.View.extend({
 
-  tagName: 'li',
+  tagName: 'div',
 
   selected: false,
 
@@ -24,14 +24,13 @@ namespace.views.Wizard = Backbone.View.extend({
   },
 
   initialize: function(){
-    this.render();
     new namespace.views.Nav();
   },
   screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{sectionTitle}}</h1>{{ title }} <br /> <div class="wizard__tip">{{ description}}</div>'),
   render: function(){
-     console.log("THIS", this);
     this.$el.html(this.screenTemplate(this.model.toJSON()));
     var buttonsView = new namespace.views.ButtonsView({ model: this.model });
+    buttonsView.render();
     return this;
   }
 });
@@ -43,19 +42,14 @@ namespace.views.Wizard = Backbone.View.extend({
 namespace.views.ButtonsView = Backbone.View.extend({
   el: ".wizard__buttons",
 
-  initialize: function() {
-    this.render();
-  },
-
   buttonsTemplate: _.template('<a href="{{id}}" class="">{{title}}</a>'),
 
   render: function() {
     var buttons = this.model.get("buttons");
     var that = this;
-       that.$el.html("");
      _.each(buttons, function(b) {
-       var view =  new namespace.views.ButtonView({button: b});
-       that.$el.append(view.render().el);
+       var buttonView =  new namespace.views.ButtonView({button: b});
+       that.$el.append(buttonView.render().el);
     });
     return this;
   }
@@ -66,31 +60,31 @@ namespace.views.ButtonsView = Backbone.View.extend({
 ////////////
 
 namespace.views.ButtonView = Backbone.View.extend({
-  tagName: "div",
 
-  className: "buttons",
+  tagName: "a",
+
+  className: "wizard__button",
+
   initialize: function(options) {
     this.options = options || {};
     this.button = this.options.button;
   },
 
   events: {
-    "click .wizard__button": "markSelected"
+    "click": "markSelected"
   },
 
   markSelected: function() {
-  //  console.log("Mark selected", this);
-    // Set  controller:
     namespace.views.wizard.selected = true;
-    namespace.views.wizard.nextSlide = this.button.buttonLinkTo;
-    //console.log("THIS", this.nextSlide);
+    this.$el.addClass("active");
+    console.log("Selected");
     event.preventDefault();
 },
 
-  buttonTemplate: _.template('<a href="{{id}}" class="wizard__button button">{{title}}</a>'),
-
   render: function() {
-    this.$el.html(this.buttonTemplate({title: this.button.buttonTitle, id: this.button.id}));
+    console.log("b", "hit");
+    this.$el.text(this.button.buttonTitle);
+    this.$el.attr("href", this.button.id);
     return this;
   }
 });
@@ -115,6 +109,7 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   render: function(slideId) {
+    console.log("rebuild");
 //    this.$el.html("NAV");
     //console.log("FIND", namespace.collections.screens.find({id: 4}));
 

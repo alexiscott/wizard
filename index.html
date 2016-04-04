@@ -8,14 +8,7 @@
     .active {
     font-weight: bold;
     }
-    .current-step-container, .button {
-    margin-bottom: 20px;
-    }
-    a.button {
-    display: inline-block;
-    padding: 5px 20px;
-    border: 1px solid black;
-    }
+
     .wizard__content-block {
     display: inline-block;
     border: 0 solid black;
@@ -56,8 +49,12 @@
   font-weight: bold;
   display: inline-block;
   margin: 0 10px 0 0;
-
 }
+
+.wizard__button.active {
+  background: #DDDDDD;
+}
+
 .wizard__button {
     @include border-radius(20px);
     padding: 8px 35px 8px 35px;
@@ -117,24 +114,24 @@
 
 
   <div id="wizard" class="wizard">
+
     <div class="wizard__header">
-      <div class="wizard__header--intro">
-      </div>        
+      <div class="wizard__header--intro"></div>        
     </div>
-    <hr class="wizard__header-line" />
-    <span class="burger"></span>
-    <div class="step-wrapper">
-      <div id="step-data">
-        <h2 id="step-title"></h2>
-      </div>
-      <div class="wizard__content-block"></div>
-      <div class="wizard__buttons"></div>
-      <div class="wizard__nav">
-        <a href="#" class="wizard__arrow-up">back</a>
-        <a href="#" class="wizard__arrow-down--filled">forward</a>
-      </div>
-    </div> <!-- Close current step container -->
-    <div id="progress-indicator"></div>
+
+     <hr class="wizard__header-line" />
+     <span class="burger"></span>
+
+
+     <div class="wizard__content-block"></div>
+
+     <div class="wizard__buttons"></div>
+
+    <div class="wizard__nav">
+      <a href="#" class="wizard__arrow-up">back</a>
+      <a href="#" class="wizard__arrow-down--filled">forward</a>
+    </div>
+
   </div> <!-- Close #wizard -->
 
 
