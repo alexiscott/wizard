@@ -26,7 +26,9 @@ namespace.views.Wizard = Backbone.View.extend({
   initialize: function(){
     new namespace.views.Nav();
   },
+
   screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{sectionTitle}}</h1>{{ title }} <br /> <div class="wizard__tip">{{ description}}</div>'),
+
   render: function(){
     this.$el.html(this.screenTemplate(this.model.toJSON()));
     var buttonsView = new namespace.views.ButtonsView({ model: this.model });
@@ -74,17 +76,21 @@ namespace.views.ButtonView = Backbone.View.extend({
     "click": "markSelected"
   },
 
-  markSelected: function() {
+  markSelected: function(e) {
     namespace.views.wizard.selected = true;
-    this.$el.addClass("active");
-    console.log("Selected");
+    namespace.views.wizard.setNextScreen($(e.currentTarget).attr("id"));
+    
+    console.log(namespace.views.wizard.nextScreen);    
+    this.$el.toggleClass("active");
+    console.log("e", e);
     event.preventDefault();
 },
 
   render: function() {
-    console.log("b", "hit");
+    console.log("el", this.button.buttonLinkTo);
+    this.$el.attr("id", this.button.buttonLinkTo);
+    this.$el.attr("href", "#");
     this.$el.text(this.button.buttonTitle);
-    this.$el.attr("href", this.button.id);
     return this;
   }
 });
@@ -102,31 +108,19 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   arrowClick: function(e) {
-    namespace.views.wizard.setNextScreen(3);
-    console.log("Event target:", e.currentTarget);
-    console.log("next scr:", namespace.views.wizard.nextScreen);
-    this.render(namespace.views.wizard.nextScreen);
+    // IF selected arrow.
+    if(namespace.views.wizard.selected) {
+      this.render();
+    }
   },
 
-  render: function(slideId) {
-    console.log("rebuild");
-//    this.$el.html("NAV");
-    //console.log("FIND", namespace.collections.screens.find({id: 4}));
-
-    // Remove el 
+  render: function() {
+    var nsNum = parseInt(namespace.views.wizard.nextScreen);
     namespace.views.wizard.remove();
+    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: nsNum }) });
+    $(".wizard__content-block").append(namespace.views.wizard.render().el);
 
-    console.log("slide", slideId);
-    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: 4}) });
-
-$(".wizard__content-block").append(namespace.views.wizard.render().el);
-
-   // namespace.views.wiz.unbind();
-//   var newScreen =  namespace.collections.screens.find({id: slideId}) 
-    console.log("new Screen: ", this.model);
-//   var w = new namespace.views.wizard({ model : newScreen});
-//    var foo =  namespace.views.wizard({ model : namespace.collections.screens.first() });
-//    console.log("foo", foo);
+   // console.log("new Screen: ", this.model);
   }
 
 });
