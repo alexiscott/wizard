@@ -19,6 +19,14 @@ namespace.views.Wizard = Backbone.View.extend({
 
   nextScreen: 0,
 
+  previousScreen: 0,
+
+  setPreviousScreen: function(screenId) {
+    console.log("SET_", screenId);
+    this.previousScreen = screenId;
+    console.log("FOO", this.previousScreen);
+  },
+
   setNextScreen: function(screenId) {
     this.nextScreen = screenId;
   },
@@ -104,21 +112,34 @@ namespace.views.Nav = Backbone.View.extend({
   el: ".wizard__nav",
   
   events:  {
-    "click .wizard__arrow-up": "arrowClick",
-    "click .wizard__arrow-down--filled": "arrowClick"
+    "click .wizard__arrow-up": "backArrowClick",
+    "click .wizard__arrow-down": "forwardArrowClick"
   },
 
-  arrowClick: function(e) {
-    // IF selected arrow.
-    if(namespace.views.wizard.selected) {
-      this.render();
+  backArrowClick: function(e) {
+    var psNum = parseInt(namespace.views.wizard.previousScreen);
+    console.log("back arrow clicked");
+    console.log("P", namespace.views.wizard.previousScreen);
+    event.preventDefault();
+    if(namespace.views.wizard.selected && psNum > 0) {
+      this.render(psNum);
     }
   },
 
-  render: function() {
+  forwardArrowClick: function(e) {
     var nsNum = parseInt(namespace.views.wizard.nextScreen);
+    console.log("forward arrow clicked");
+    // IF selected arrow.
+    if(namespace.views.wizard.selected && nsNum > 0) {
+      namespace.views.wizard.setPreviousScreen(5); // Set to current. AIS.
+      this.render(nsNum);
+    }
+    event.preventDefault();
+  },
+
+  render: function(screenNum) {
     namespace.views.wizard.remove();
-    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: nsNum }) });
+    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: screenNum }) });
     $(".wizard__content-block").append(namespace.views.wizard.render().el);
 
    // console.log("new Screen: ", this.model);
