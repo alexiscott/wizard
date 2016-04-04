@@ -124,7 +124,7 @@ namespace.views.Nav = Backbone.View.extend({
     console.log("slide", slideId);
     namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: 4}) });
 
-$(".c").append(namespace.views.wizard.render().el);
+$(".wizard__content-block").append(namespace.views.wizard.render().el);
 
    // namespace.views.wiz.unbind();
 //   var newScreen =  namespace.collections.screens.find({id: slideId}) 
