@@ -47,6 +47,7 @@ namespace.views.ButtonsView = Backbone.View.extend({
   buttonsTemplate: _.template('<a href="{{id}}" class="">{{title}}</a>'),
 
   render: function() {
+    this.$el.find("a").remove();
     var buttons = this.model.get("buttons");
     var that = this;
      _.each(buttons, function(b) {
@@ -78,7 +79,7 @@ namespace.views.ButtonView = Backbone.View.extend({
 
   markSelected: function(e) {
     namespace.views.wizard.selected = true;
-    namespace.views.wizard.setNextScreen($(e.currentTarget).attr("id"));
+    namespace.views.wizard.setNextScreen($(e.currentTarget).attr("go-to-id"));
     
     console.log(namespace.views.wizard.nextScreen);    
     this.$el.toggleClass("active");
@@ -88,7 +89,7 @@ namespace.views.ButtonView = Backbone.View.extend({
 
   render: function() {
     console.log("el", this.button.buttonLinkTo);
-    this.$el.attr("id", this.button.buttonLinkTo);
+    this.$el.attr("go-to-id", this.button.buttonLinkTo);
     this.$el.attr("href", "#");
     this.$el.text(this.button.buttonTitle);
     return this;

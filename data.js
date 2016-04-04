@@ -83,8 +83,18 @@ var bp_wizard_data =
       {
         buttonTitle: "Any other color or chequered",
         buttonResult: "Uptight chequerer pyjama person.",
-        buttonLinkTo: 6
+        buttonLinkTo: 5
       },
+    ]
+  },
+
+    {
+    screenId: 5, 
+    screenTitle: "Congratulations",
+    screenDescription: "We like colored and chequered pyjamas",
+    section: 2,
+    sectionTitle: "SEC 2",
+    buttons: [
     ]
   },
 
