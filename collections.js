@@ -15,11 +15,11 @@ namespace.collections.screens = new namespace.collections.Screens();
 // Add "screen" models to our backbone "screens" collection.
 _.each(bp_wizard_data, function(obj, index) {
   var s = new namespace.models.Screen({
-    id: obj.screenId,
-    buttons: obj.buttons,
-    sectionTitle:            obj.sectionTitle,
-    title:             obj.screenTitle,
-    description:       obj.screenDescription
+    id:                obj.field_screen_id,
+    buttons:           obj.buttons,
+    sectionTitle:      obj.field_section,
+    title:             obj.title,
+    description:       obj.field_description
   });  
   namespace.collections.screens.add(s);
 });

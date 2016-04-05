@@ -96,10 +96,9 @@ namespace.views.ButtonView = Backbone.View.extend({
 },
 
   render: function() {
-    console.log("el", this.button.buttonLinkTo);
-    this.$el.attr("go-to-id", this.button.buttonLinkTo);
+    this.$el.attr("go-to-id", this.button["Button Anchor Destination"]["#markup"]);
     this.$el.attr("href", "#");
-    this.$el.text(this.button.buttonTitle);
+    this.$el.text(this.button["Button Title"]["#markup"]);
     return this;
   }
 });
