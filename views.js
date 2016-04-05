@@ -21,18 +21,41 @@ namespace.views.Wizard = Backbone.View.extend({
 
   previousScreen: 0,
 
+  setSelected: function() {
+    this.selected = true;
+    console.log("Selected state: ", this.selected);
+  },
+
   setPreviousScreen: function(screenId) {
-    console.log("SET_", screenId);
+    console.log("SET Previous screen ID", screenId);
     this.previousScreen = screenId;
-    console.log("FOO", this.previousScreen);
   },
 
   setNextScreen: function(screenId) {
     this.nextScreen = screenId;
+    console.log("SET Next screen ID", screenId);
   },
 
   initialize: function(){
     new namespace.views.Nav();
+    this.setupInitialButtonStates();
+  },
+
+  setupInitialButtonStates() {
+    /* If the first button has no title, then treat it as a buttonless screen
+     *  and set the states for navigation.
+     */
+    console.log("Wizard model", this.model);
+    var button = this.model.get("buttons")[0];
+    var nextScreenId = 0;
+    console.log("first button", button);
+    if (button["Button Anchor Destination"]["#markup"] 
+        && button['Button Title']["#markup"] === undefined ) {
+      nextScreenId = parseInt(button["Button Anchor Destination"]["#markup"]);
+      console.log("Next Screen ID", nextScreenId);
+      this.setSelected();
+      this.setNextScreen(nextScreenId);
+    }
   },
 
   screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{sectionTitle}}</h1>{{ title }} <br /> <div class="wizard__tip">{{ description}}</div>'),
@@ -59,6 +82,7 @@ namespace.views.ButtonsView = Backbone.View.extend({
     var buttons = this.model.get("buttons");
     var that = this;
      _.each(buttons, function(b) {
+       console.log("button", b);
        var buttonView =  new namespace.views.ButtonView({button: b});
        that.$el.append(buttonView.render().el);
     });
@@ -66,9 +90,9 @@ namespace.views.ButtonsView = Backbone.View.extend({
   }
 });
 
-////////////
-// Button //
-////////////
+//////////////
+// A Button //
+//////////////
 
 namespace.views.ButtonView = Backbone.View.extend({
 
@@ -91,7 +115,7 @@ namespace.views.ButtonView = Backbone.View.extend({
     
     console.log(namespace.views.wizard.nextScreen);    
     this.$el.toggleClass("active");
-    console.log("e", e);
+    console.log("event on mark selected.", e);
     event.preventDefault();
 },
 
@@ -129,8 +153,9 @@ namespace.views.Nav = Backbone.View.extend({
     var nsNum = parseInt(namespace.views.wizard.nextScreen);
     console.log("forward arrow clicked");
     // IF selected arrow.
+    console.log("Next Number: ", nsNum);
     if(namespace.views.wizard.selected && nsNum > 0) {
-      namespace.views.wizard.setPreviousScreen(5); // Set to current. AIS.
+      namespace.views.wizard.setPreviousScreen(nsNum);
       this.render(nsNum);
     }
     event.preventDefault();

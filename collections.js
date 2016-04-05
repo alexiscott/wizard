@@ -15,7 +15,8 @@ namespace.collections.screens = new namespace.collections.Screens();
 // Add "screen" models to our backbone "screens" collection.
 _.each(bp_wizard_data, function(obj, index) {
   var s = new namespace.models.Screen({
-    id:                obj.field_screen_id,
+
+    id:                parseInt(obj.field_screen_id), // Use integer in JSON?
     buttons:           obj.buttons,
     sectionTitle:      obj.field_section,
     title:             obj.title,

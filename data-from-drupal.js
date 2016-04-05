@@ -1,8 +1,53 @@
 var bp_wizard_data = [
   {
     "field_section": "1",
-    "field_description": "Well, the way they make shows is, they make one show. That show&#039;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&#039;re going to make more shows. Some pilots get picked and become television programs. Some don&#039;t, become nothing. ",
+    "field_description": "Start of section screen",
     "field_screen_id": "15",
+    "title": "<a href=\"\/content\/she-starred-one-ones-became-nothing\">She starred in one of the ones that became nothing.<\/a>",
+    "nid": "10",
+
+    "buttons": [
+      {
+        "Button Anchor Destination": {
+          "#markup": "2"
+        },
+        "Button Title": {
+        }
+      }
+    ]
+
+
+  },
+  {
+    "field_section": "2",
+    "field_description": "Welcome to the second screen",
+    "field_screen_id": "2",
+    "title": "<a href=\"\/content\/testing-2\">Testing 2<\/a>",
+    "nid": "11",
+    "buttons": [
+      {
+        "Button Anchor Destination": {
+          "#markup": "3"
+        },
+        "Button Title": {
+          "#markup": "Yes"
+        }
+      },
+      {
+        "Button Anchor Destination": {
+          "#markup": "3"
+        },
+        "Button Title": {
+          "#markup": "No"
+        }
+      }
+    ]
+  },
+
+  {
+    "field_section": "1",
+    "field_description": "Well, the way they make shows is, they make one show. That show&#039;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&#039;re going to make more shows. Some pilots get picked and become television programs. Some don&#039;t, become nothing. ",
+    "field_screen_id": "3",
     "title": "<a href=\"\/content\/she-starred-one-ones-became-nothing\">She starred in one of the ones that became nothing.<\/a>",
     "nid": "10",
     "buttons": [
@@ -11,7 +56,7 @@ var bp_wizard_data = [
           "#markup": "<p>Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.<\/p>"
         },
         "Button Anchor Destination": {
-          "#markup": 2
+          "#markup": "4"
         },
         "Button Title": {
           "#markup": "Yes"
@@ -30,29 +75,4 @@ var bp_wizard_data = [
       }
     ]
   },
-  {
-    "field_section": "2",
-    "field_description": "Welcome to the second screen",
-    "field_screen_id": 2,
-    "title": "<a href=\"\/content\/testing-2\">Testing 2<\/a>",
-    "nid": "11",
-    "buttons": [
-      {
-        "Button Anchor Destination": {
-          "#markup": "3.1"
-        },
-        "Button Title": {
-          "#markup": "Yes"
-        }
-      },
-      {
-        "Button Anchor Destination": {
-          "#markup": "3.2"
-        },
-        "Button Title": {
-          "#markup": "No"
-        }
-      }
-    ]
-  }
 ]
