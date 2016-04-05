@@ -149,18 +149,22 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   forwardArrowClick: function(e) {
-    var nsNum = namespace.views.wizard.nextScreen;
+    // @TODO, see why this was not returning an int.
+    var screenNum = parseInt(namespace.views.wizard.nextScreen);
+    console.log("Numeric", _.isNumber(screenNum) + " " + screenNum);
     console.log("forward arrow clicked");
     // IF selected arrow.
-    console.log("Next Number: ", nsNum);
-    if(namespace.views.wizard.selected && nsNum > 0) {
-      namespace.views.wizard.setPreviousScreen(nsNum);
-      this.render(nsNum);
+    console.log("Next Number: ", screenNum);
+    if(namespace.views.wizard.selected && screenNum > 0) {
+      namespace.views.wizard.setNextScreen(screenNum);
+      this.render(screenNum);
     }
     event.preventDefault();
   },
 
   render: function(screenNum) {
+    console.log("Screen Num for lookup: ", screenNum);
+    // Remove dom node:
     namespace.views.wizard.remove();
     namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: screenNum }) });
     $(".wizard__content-block").append(namespace.views.wizard.render().el);
