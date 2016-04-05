@@ -2,7 +2,7 @@ var bp_wizard_data = [
   {
     "field_section": "1",
     "field_description": "Start of section screen",
-    "field_screen_id": "15",
+    "field_screen_id": "1",
     "title": "<a href=\"\/content\/she-starred-one-ones-became-nothing\">She starred in one of the ones that became nothing.<\/a>",
     "nid": "10",
 
@@ -45,7 +45,7 @@ var bp_wizard_data = [
   },
 
   {
-    "field_section": "1",
+    "field_section": "2",
     "field_description": "Well, the way they make shows is, they make one show. That show&#039;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&#039;re going to make more shows. Some pilots get picked and become television programs. Some don&#039;t, become nothing. ",
     "field_screen_id": "3",
     "title": "<a href=\"\/content\/she-starred-one-ones-became-nothing\">She starred in one of the ones that became nothing.<\/a>",

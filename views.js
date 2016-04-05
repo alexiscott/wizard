@@ -17,9 +17,13 @@ namespace.views.Wizard = Backbone.View.extend({
 
   selected: false,
 
-  nextScreen: 0,
+  currentScreen: 0,
 
   previousScreen: 0,
+
+  getCurrentScreen: function() {
+    return this.currentScreen;
+  },
 
   setSelected: function() {
     this.selected = true;
@@ -27,12 +31,12 @@ namespace.views.Wizard = Backbone.View.extend({
   },
 
   setPreviousScreen: function(screenId) {
-    console.log("SET Previous screen ID", screenId);
     this.previousScreen = screenId;
+    console.log("SET Previous screen ID", parseInt(this.previousScreen));
   },
 
   setNextScreen: function(screenId) {
-    this.nextScreen = screenId;
+    this.currentScreen = screenId;
     console.log("SET Next screen ID", screenId);
   },
 
@@ -47,13 +51,13 @@ namespace.views.Wizard = Backbone.View.extend({
      */
     console.log("Wizard model", this.model);
     var button = this.model.get("buttons")[0];
-    var nextScreenId = 0;
+    var currentScreenId = 0;
     console.log("first button", button);
     if (button.dest && button.title === undefined ) {
-      nextScreenId = button.dest;
-      console.log("Next Screen ID", nextScreenId);
+      currentScreenId = button.dest;
+      console.log("Next Screen ID", currentScreenId);
       this.setSelected();
-      this.setNextScreen(nextScreenId);
+      this.setNextScreen(currentScreenId);
     }
   },
 
@@ -112,7 +116,7 @@ namespace.views.ButtonView = Backbone.View.extend({
     namespace.views.wizard.selected = true;
     namespace.views.wizard.setNextScreen($(e.currentTarget).attr("go-to-id"));
     
-    console.log(namespace.views.wizard.nextScreen);    
+    console.log(namespace.views.wizard.currentScreen);    
     this.$el.toggleClass("active");
     console.log("event on mark selected.", e);
     event.preventDefault();
@@ -144,18 +148,21 @@ namespace.views.Nav = Backbone.View.extend({
     console.log("P", namespace.views.wizard.previousScreen);
     event.preventDefault();
     if(namespace.views.wizard.selected && psNum > 0) {
-      this.render(psNum);
+      this.render(1);
     }
   },
 
   forwardArrowClick: function(e) {
     // @TODO, see why this was not returning an int.
-    var screenNum = parseInt(namespace.views.wizard.nextScreen);
+    var screenNum = parseInt(namespace.views.wizard.currentScreen);
     console.log("Numeric", _.isNumber(screenNum) + " " + screenNum);
     console.log("forward arrow clicked");
     // IF selected arrow.
     console.log("Next Number: ", screenNum);
+//      namespace.views.wizard.setPreviousScreen(namespace.views.wizard.getCurrentScreen());
+      namespace.views.wizard.setPreviousScreen(1);
     if(namespace.views.wizard.selected && screenNum > 0) {
+      console.log("SET PREV");
       namespace.views.wizard.setNextScreen(screenNum);
       this.render(screenNum);
     }
