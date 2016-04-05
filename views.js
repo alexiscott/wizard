@@ -147,8 +147,8 @@ namespace.views.Nav = Backbone.View.extend({
     console.log("back arrow clicked");
     console.log("P", namespace.views.wizard.previousScreen);
     event.preventDefault();
-    if(namespace.views.wizard.selected && psNum > 0) {
-      this.render(1);
+    if(psNum > 0) {
+      this.render(psNum);
     }
   },
 
