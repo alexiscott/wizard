@@ -49,9 +49,8 @@ namespace.views.Wizard = Backbone.View.extend({
     var button = this.model.get("buttons")[0];
     var nextScreenId = 0;
     console.log("first button", button);
-    if (button["Button Anchor Destination"]["#markup"] 
-        && button['Button Title']["#markup"] === undefined ) {
-      nextScreenId = parseInt(button["Button Anchor Destination"]["#markup"]);
+    if (button.dest && button.title === undefined ) {
+      nextScreenId = button.dest;
       console.log("Next Screen ID", nextScreenId);
       this.setSelected();
       this.setNextScreen(nextScreenId);
@@ -120,9 +119,9 @@ namespace.views.ButtonView = Backbone.View.extend({
 },
 
   render: function() {
-    this.$el.attr("go-to-id", this.button["Button Anchor Destination"]["#markup"]);
+    this.$el.attr("go-to-id", this.button.dest);
     this.$el.attr("href", "#");
-    this.$el.text(this.button["Button Title"]["#markup"]);
+    this.$el.text(this.button.title);
     return this;
   }
 });
@@ -140,7 +139,7 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   backArrowClick: function(e) {
-    var psNum = parseInt(namespace.views.wizard.previousScreen);
+    var psNum = namespace.views.wizard.previousScreen;
     console.log("back arrow clicked");
     console.log("P", namespace.views.wizard.previousScreen);
     event.preventDefault();
@@ -150,7 +149,7 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   forwardArrowClick: function(e) {
-    var nsNum = parseInt(namespace.views.wizard.nextScreen);
+    var nsNum = namespace.views.wizard.nextScreen;
     console.log("forward arrow clicked");
     // IF selected arrow.
     console.log("Next Number: ", nsNum);
