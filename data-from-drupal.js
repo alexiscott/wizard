@@ -1,3 +1,11 @@
+var sections_lookup = 
+  {
+    "1": "First section",
+    "2": "Second section",
+    "3": "third section",
+  };
+
+
 var bp_wizard_data = [
   {
     "field_section": "1",
@@ -19,7 +27,7 @@ var bp_wizard_data = [
 
   },
   {
-    "field_section": "2",
+    "field_section": "1",
     "field_description": "Welcome to the second screen",
     "field_screen_id": "2",
     "title": "<a href=\"\/content\/testing-2\">Testing 2<\/a>",
