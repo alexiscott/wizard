@@ -5,13 +5,9 @@ namespace.models = {};
 
 namespace.models.Screen = Backbone.Model.extend({
   defaults: {
-    chosen: false,
-    selected: false
+    chosen: false
   },
 
-  setSelected: function() {
-    this.set({selected: true});
-  },
 
 
 });

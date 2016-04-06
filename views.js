@@ -17,6 +17,8 @@ namespace.views.Wizard = Backbone.View.extend({
 
   currentScreen: 0,
 
+  selected: false,
+
   initialize: function(){
     new namespace.views.Nav();
   },
@@ -35,7 +37,8 @@ namespace.views.Wizard = Backbone.View.extend({
   },
 
   advanceScreen: function() {
-    if (this.model.get("selected")) {
+    if (this.selected) {
+      this.selected = false;
       return true;
     }
    return false;
@@ -66,7 +69,6 @@ namespace.views.ButtonsView = Backbone.View.extend({
     var buttons = this.model.get("buttons");
     var that = this;
      _.each(buttons, function(b) {
-       // console.log("button", b);
        var buttonView =  new namespace.views.ButtonView({button: b, model: that.model});
        that.$el.append(buttonView.render().el);
     });
@@ -93,8 +95,11 @@ namespace.views.ButtonView = Backbone.View.extend({
     "click": "markSelected"
   },
 
+  /* Mark selected, used for forward arrow functionality. 
+   * And setup the next screen from the DOM.
+   */
   markSelected: function(event) {
-    this.model.set({selected: true});
+    namespace.views.wizard.selected = true;
     namespace.views.wizard.setScreen($(event.currentTarget).attr("go-to-id"));
     this.$el.toggleClass("active");
     event.preventDefault();
