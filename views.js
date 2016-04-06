@@ -15,55 +15,36 @@ namespace.views.Wizard = Backbone.View.extend({
 
   tagName: 'div',
 
-  selected: false,
-
   currentScreen: 0,
-
-  previousScreen: 0,
-
-  getCurrentScreen: function() {
-    return this.currentScreen;
-  },
-
-  setSelected: function() {
-    this.selected = true;
-    console.log("Selected state: ", this.selected);
-  },
-
-  setPreviousScreen: function(screenId) {
-    this.previousScreen = screenId;
-    console.log("SET Previous screen ID", parseInt(this.previousScreen));
-  },
-
-  setNextScreen: function(screenId) {
-    this.currentScreen = screenId;
-    console.log("SET Next screen ID", screenId);
-  },
 
   initialize: function(){
     new namespace.views.Nav();
-    this.setupInitialButtonStates();
   },
 
-  setupInitialButtonStates() {
-    /* If the first button has no title, then treat it as a buttonless screen
-     *  and set the states for navigation.
-     */
-    console.log("Wizard model", this.model);
-    var button = this.model.get("buttons")[0];
-    var currentScreenId = 0;
-    console.log("first button", button);
-    if (button.dest && button.title === undefined ) {
-      currentScreenId = button.dest;
-      console.log("Next Screen ID", currentScreenId);
-      this.setSelected();
-      this.setNextScreen(currentScreenId);
+  getCurrentScreen: function() {
+    return parseInt(this.currentScreen);
+  },
+
+  /* Set the currentScreen Property. */
+  setScreen: function(screenId) {
+    this.currentScreen = screenId;
+  },
+
+  setScreenChosen: function() {
+    this.model.set({chosen: true});
+  },
+
+  advanceScreen: function() {
+    if (this.model.get("selected")) {
+      return true;
     }
+   return false;
   },
 
   screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{sectionTitle}}</h1>{{ title }} <br /> <div class="wizard__tip">{{ description}}</div>'),
 
   render: function(){
+    console.log("wizard view: ", this);
     this.$el.html(this.screenTemplate(this.model.toJSON()));
     var buttonsView = new namespace.views.ButtonsView({ model: this.model });
     buttonsView.render();
@@ -85,8 +66,8 @@ namespace.views.ButtonsView = Backbone.View.extend({
     var buttons = this.model.get("buttons");
     var that = this;
      _.each(buttons, function(b) {
-       console.log("button", b);
-       var buttonView =  new namespace.views.ButtonView({button: b});
+       // console.log("button", b);
+       var buttonView =  new namespace.views.ButtonView({button: b, model: that.model});
        that.$el.append(buttonView.render().el);
     });
     return this;
@@ -112,13 +93,10 @@ namespace.views.ButtonView = Backbone.View.extend({
     "click": "markSelected"
   },
 
-  markSelected: function(e) {
-    namespace.views.wizard.selected = true;
-    namespace.views.wizard.setNextScreen($(e.currentTarget).attr("go-to-id"));
-    
-    console.log(namespace.views.wizard.currentScreen);    
+  markSelected: function(event) {
+    this.model.set({selected: true});
+    namespace.views.wizard.setScreen($(event.currentTarget).attr("go-to-id"));
     this.$el.toggleClass("active");
-    console.log("event on mark selected.", e);
     event.preventDefault();
 },
 
@@ -142,41 +120,24 @@ namespace.views.Nav = Backbone.View.extend({
     "click .wizard__arrow-down": "forwardArrowClick"
   },
 
-  backArrowClick: function(e) {
-    var psNum = namespace.views.wizard.previousScreen;
-    console.log("back arrow clicked");
-    console.log("P", namespace.views.wizard.previousScreen);
+  backArrowClick: function(event) {
     event.preventDefault();
-    if(psNum > 0) {
-      this.render(psNum);
-    }
+
   },
 
-  forwardArrowClick: function(e) {
-    // @TODO, see why this was not returning an int.
-    var screenNum = parseInt(namespace.views.wizard.currentScreen);
-    console.log("Numeric", _.isNumber(screenNum) + " " + screenNum);
-    console.log("forward arrow clicked");
-    // IF selected arrow.
-    console.log("Next Number: ", screenNum);
-//      namespace.views.wizard.setPreviousScreen(namespace.views.wizard.getCurrentScreen());
-      namespace.views.wizard.setPreviousScreen(1);
-    if(namespace.views.wizard.selected && screenNum > 0) {
-      console.log("SET PREV");
-      namespace.views.wizard.setNextScreen(screenNum);
-      this.render(screenNum);
+  forwardArrowClick: function(event) {
+
+    if(namespace.views.wizard.advanceScreen()) {
+      this.render();
     }
     event.preventDefault();
   },
 
-  render: function(screenNum) {
-    console.log("Screen Num for lookup: ", screenNum);
-    // Remove dom node:
+  render: function() {
+    namespace.views.wizard.setScreenChosen();
     namespace.views.wizard.remove();
-    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: screenNum }) });
+    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: namespace.views.wizard.getCurrentScreen() }) });
     $(".wizard__content-block").append(namespace.views.wizard.render().el);
-
-   // console.log("new Screen: ", this.model);
   }
 
 });

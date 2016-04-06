@@ -11,7 +11,7 @@ var bp_wizard_data = [
     "field_section": "1",
     "field_description": "Start of section screen",
     "field_screen_id": "1",
-    "title": "<a href=\"\/content\/she-starred-one-ones-became-nothing\">She starred in one of the ones that became nothing.<\/a>",
+    "title": "SCREEN 1",
     "nid": "10",
 
     "buttons": [
@@ -20,17 +20,16 @@ var bp_wizard_data = [
           "#markup": "2"
         },
         "Button Title": {
+          "#markup": "Yes"
         }
       }
     ]
-
-
   },
   {
     "field_section": "1",
     "field_description": "Welcome to the second screen",
     "field_screen_id": "2",
-    "title": "<a href=\"\/content\/testing-2\">Testing 2<\/a>",
+    "title": "SCREEN 2",
     "nid": "11",
     "buttons": [
       {
@@ -56,7 +55,7 @@ var bp_wizard_data = [
     "field_section": "2",
     "field_description": "Well, the way they make shows is, they make one show. That show&#039;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&#039;re going to make more shows. Some pilots get picked and become television programs. Some don&#039;t, become nothing. ",
     "field_screen_id": "3",
-    "title": "<a href=\"\/content\/she-starred-one-ones-became-nothing\">She starred in one of the ones that became nothing.<\/a>",
+    "title": "SCREEN 3",
     "nid": "10",
     "buttons": [
       {
@@ -83,4 +82,25 @@ var bp_wizard_data = [
       }
     ]
   },
+
+  {
+    "field_section": "3",
+    "field_description": "",
+    "field_screen_id": "4",
+    "title": "SCREEN 4: Congratulations, these are your results:",
+    "nid": "10",
+
+    "buttons": [
+      {
+        "Button Anchor Destination": {
+          "#markup": "LAST" // AIS Special.
+        },
+        "Button Title": {
+        }
+      }
+    ]
+
+
+  }
+
 ]

@@ -6,7 +6,14 @@ var namespace = namespace ||  {};
 namespace.collections = {}
 
 namespace.collections.Screens = Backbone.Collection.extend({
-      model: namespace.models.Screen    
+  model: namespace.models.Screen,
+
+  //localStorage: new Backbone.LocalStorage('todos-backbone'),
+
+  chosen: function () {
+    return this.where({chosen: true});
+  }
+    
 });
 
 // Create backbone collection "screens".
@@ -31,7 +38,7 @@ _.each(bp_wizard_data, function(obj, index) {
     title:            obj.title,
     description:      obj.field_description
   });  
-  console.log("Screen adding to collection: ", s.get("buttons"));
+//  console.log("Screen adding to collection: ", s.get("buttons"));
   namespace.collections.screens.add(s);
 });
 

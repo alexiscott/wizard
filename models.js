@@ -1,22 +1,21 @@
-  // Model construction.
+  // Model constructor Screen.
 
 var namespace = namespace ||  {};
 namespace.models = {};
 
 namespace.models.Screen = Backbone.Model.extend({
   defaults: {
-    foo: "default"
-  }
+    chosen: false,
+    selected: false
+  },
+
+  setSelected: function() {
+    this.set({selected: true});
+  },
+
+
 });
 
-namespace.models.Button = Backbone.Model.extend({
-  defaults: {
-    selected: false,
-    title: "untitled",
-    result: "resultless",
-    anchor: "1"
-  }
-});
 
 
 
