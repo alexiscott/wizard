@@ -15,13 +15,9 @@ namespace.views.Wizard = Backbone.View.extend({
 
   tagName: 'div',
 
-  currentScreen: 0,
+  currentScreen: undefined,
 
   selected: false,
-
-  initialize: function(){
-    new namespace.views.Nav();
-  },
 
   getCurrentScreen: function() {
     return parseInt(this.currentScreen);
@@ -44,10 +40,19 @@ namespace.views.Wizard = Backbone.View.extend({
    return false;
   },
 
+  goBackScreen: function() {
+    // @TODO Check form multiple back clicks.
+    if (this.getCurrentScreen !== 0) {
+      var chosen = _.last(namespace.collections.screens.chosen());
+      this.setScreen(chosen.get("id"));
+      return true;
+    }
+    return false;
+  },
+
   screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{sectionTitle}}</h1>{{ title }} <br /> <div class="wizard__tip">{{ description}}</div>'),
 
   render: function(){
-    console.log("wizard view: ", this);
     this.$el.html(this.screenTemplate(this.model.toJSON()));
     var buttonsView = new namespace.views.ButtonsView({ model: this.model });
     buttonsView.render();
@@ -126,8 +131,11 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   backArrowClick: function(event) {
-    event.preventDefault();
+    if(namespace.views.wizard.goBackScreen()) {
+      this.render();
+    };
 
+    event.preventDefault();
   },
 
   forwardArrowClick: function(event) {
