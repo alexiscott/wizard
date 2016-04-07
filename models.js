@@ -5,10 +5,9 @@ namespace.models = {};
 
 namespace.models.Screen = Backbone.Model.extend({
   defaults: {
-    chosen: false
+    chosen: false,
+    resultsPage: false,
   },
-
-
 
 });
 

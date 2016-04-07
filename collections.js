@@ -12,7 +12,9 @@ namespace.collections.Screens = Backbone.Collection.extend({
 
   chosen: function () {
     return this.where({chosen: true});
-  }
+  },
+
+
     
 });
 
@@ -30,7 +32,8 @@ _.each(bp_wizard_data, function(obj, index) {
     buttons:           _.map(obj.buttons, function(button) {
       return {
         dest: parseInt(button["Button Anchor Destination"]["#markup"]),
-        title: button["Button Title"]["#markup"]
+        title: button["Button Title"]["#markup"],
+        result: button["Button Result"]["#markup"],
       };
     }),
     sectionTitle:     sections_lookup[obj.field_section],
@@ -38,8 +41,11 @@ _.each(bp_wizard_data, function(obj, index) {
     title:            obj.title,
     description:      obj.field_description
   });  
-//  console.log("Screen adding to collection: ", s.get("buttons"));
   namespace.collections.screens.add(s);
 });
+
+namespace.collections.screens.models[2].set({resultsPage: true}); // CHANGE to last().
+
+
 
 

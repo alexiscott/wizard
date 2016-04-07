@@ -21,6 +21,9 @@ var bp_wizard_data = [
         },
         "Button Title": {
           "#markup": "Yes"
+        },
+        "Button Result": {
+          "#markup": ""
         }
       }
     ]
@@ -38,6 +41,9 @@ var bp_wizard_data = [
         },
         "Button Title": {
           "#markup": "Yes"
+        },
+        "Button Result": {
+          "#markup": "Good choice."
         }
       },
       {
@@ -46,6 +52,9 @@ var bp_wizard_data = [
         },
         "Button Title": {
           "#markup": "No"
+        },
+        "Button Result": {
+          "#markup": "Bad choice."
         }
       }
     ]
@@ -67,10 +76,13 @@ var bp_wizard_data = [
         },
         "Button Title": {
           "#markup": "Yes"
+        },
+        "Button Result": {
+          "#markup": "Great choice"
         }
       },
       {
-        "Button Result Text": {
+        "Button Result": {
           "#markup": "<p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.<\/p>"
         },
         "Button Anchor Destination": {
@@ -78,6 +90,9 @@ var bp_wizard_data = [
         },
         "Button Title": {
           "#markup": "No"
+        },
+        "Button Result": {
+          "#markup": "Terrible choice"
         }
       }
     ]
@@ -96,10 +111,12 @@ var bp_wizard_data = [
           "#markup": "LAST" // AIS Special.
         },
         "Button Title": {
+        },
+        "Button Result": {
+          "#markup": ""
         }
       }
     ]
-
 
   }
 
