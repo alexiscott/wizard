@@ -1,12 +1,15 @@
 var sections_lookup = 
   {
-    "1": "First section",
-    "2": "Second section",
-    "3": "third section",
+    "1": "Register your business",
+    "2": "Name your business",
+    "3": "Get a seller's permit",
+    // "4": "Get an employer identification number",
+    // "5": "Your business registration guide",
   };
 
 
 var bp_wizard_data = [
+   // SECTION 1
   {
     "field_section": "1",
     "field_description": "Start of section screen",
@@ -28,6 +31,7 @@ var bp_wizard_data = [
       }
     ]
   },
+
   {
     "field_section": "1",
     "field_description": "Welcome to the second screen",
@@ -59,7 +63,7 @@ var bp_wizard_data = [
       }
     ]
   },
-
+  // SECTION 2
   {
     "field_section": "2",
     "field_description": "Well, the way they make shows is, they make one show. That show&#039;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&#039;re going to make more shows. Some pilots get picked and become television programs. Some don&#039;t, become nothing. ",
@@ -81,12 +85,14 @@ var bp_wizard_data = [
           "#markup": "Great choice"
         }
       },
+
+
       {
         "Button Result": {
           "#markup": "<p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.<\/p>"
         },
         "Button Anchor Destination": {
-          "#markup": "2.3"
+          "#markup": "4"
         },
         "Button Title": {
           "#markup": "No"
@@ -98,6 +104,7 @@ var bp_wizard_data = [
     ]
   },
 
+  // SECTION 3
   {
     "field_section": "3",
     "field_description": "",
@@ -108,7 +115,7 @@ var bp_wizard_data = [
     "buttons": [
       {
         "Button Anchor Destination": {
-          "#markup": "LAST" // AIS Special.
+          "#markup": "5"
         },
         "Button Title": {
         },
@@ -117,7 +124,51 @@ var bp_wizard_data = [
         }
       }
     ]
+  },
 
+  // SECTION 4
+  {
+    "field_section": "4",
+    "field_description": "Description...",
+    "field_screen_id": "5",
+    "title": "SCREEN 5:",
+    "nid": "10",
+
+    "buttons": [
+      {
+        "Button Anchor Destination": {
+          "#markup": "6"
+        },
+        "Button Title": {
+          "#markup": "Yes"
+        },
+        "Button Result": {
+          "#markup": "Result..."
+        }
+      }
+    ]
+  },
+
+  // SECTION 5
+  {
+    "field_section": "5",
+    "field_description": "Description...",
+    "field_screen_id": "6",
+    "title": "SCREEN 6:",
+    "nid": "10",
+
+    "buttons": [
+      {
+        "Button Anchor Destination": {
+          "#markup": "6"
+        },
+        "Button Title": {
+          "#markup": "Yes"
+        },
+        "Button Result": {
+          "#markup": "LAST"
+        }
+      }
+    ]
   }
-
 ]

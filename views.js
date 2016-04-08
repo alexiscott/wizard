@@ -11,6 +11,12 @@ _.templateSettings = {
 // Wizard //
 ////////////
 
+var obj = {
+  t: function() {
+    console.log("fired t");
+  }
+}
+
 namespace.views.Wizard = Backbone.View.extend({
 
   tagName: 'div',
@@ -162,6 +168,7 @@ namespace.views.Nav = Backbone.View.extend({
     namespace.views.wizard.setScreenChosen();
     namespace.views.wizard.remove();
     namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: namespace.views.wizard.getCurrentScreen() }) });
+    Backbone.trigger("current:update");
     $(".wizard__content-block").append(namespace.views.wizard.render().el);
   }
 
@@ -188,6 +195,9 @@ namespace.views.ResultsView = Backbone.View.extend({
   }
 });
 
+////////////
+// Result //
+////////////
 
 namespace.views.Result = Backbone.View.extend({
   
@@ -198,4 +208,94 @@ namespace.views.Result = Backbone.View.extend({
     return this;
   }
 
+});
+
+
+//////////////
+// Progress //
+//////////////
+
+
+namespace.views.Progress = Backbone.View.extend({
+  
+  el: ".wizard__progress-bar",
+
+  initialize: function() {
+    Backbone.on("current:update", this.render, this);
+  },
+
+  render: function() {
+    this.$el.find("ul").remove();
+    this.$el.find("li").remove();
+    var progress = namespace.collections.sections.models;
+
+    _.each(progress, function(section) {
+      var s = new namespace.views.Section({model: section}).render().el;
+      this.$el.append(s);
+    }, this);
+
+    return this;
+  }
+
+});
+
+
+namespace.views.Section = Backbone.View.extend({
+  
+  tagName: "li",
+
+  template: _.template("<h5>{{name}}</h5>"),
+  
+  render: function() {
+    this.$el.append(this.template({name: this.model.get("title")}));    
+    var sectionSteps = new namespace.views.SectionSteps({sectionId: this.model.get("id")}).render().el;
+    this.$el.append(sectionSteps);
+    return this;
+  }
+
+});
+
+
+namespace.views.SectionSteps = Backbone.View.extend({
+
+  tagName: "ul",
+
+  initialize: function(options) {
+    this.options = options || {};
+    this.sectionId = this.options.sectionId;
+    this.on("h", this.render);
+  },
+
+  render:function() {
+    var screens = namespace.collections.screens.where({sectionId: this.sectionId});
+    var graphic;    
+    _.each(screens, function(s) {
+
+      if (s.get("id") === namespace.views.wizard.model.get("id")) {
+        graphic = " O ";
+      } else {
+        graphic = " | ";
+      }
+
+      var sectionStepItem = new namespace.views.SectionStepItem({graphic: graphic}).render().el;
+      this.$el.append(sectionStepItem);
+    }, this );
+    return this;
+  }
+});
+
+
+
+namespace.views.SectionStepItem = Backbone.View.extend({
+  tagName: "li",
+
+  initialize: function(options) {
+    this.options = options || {};
+    this.graphic = this.options.graphic;
+  },
+
+  render: function() {
+    this.$el.html(this.graphic);
+    return this;
+  }
 });

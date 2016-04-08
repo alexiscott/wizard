@@ -18,7 +18,10 @@ namespace.collections.Screens = Backbone.Collection.extend({
     
 });
 
-// Create backbone collection "screens".
+ ///////////////////////////////////////////
+ // Create backbone collection "screens". //
+ ///////////////////////////////////////////
+
 namespace.collections.screens = new namespace.collections.Screens();
 
 // Add "screen" models to our backbone "screens" collection.
@@ -36,7 +39,8 @@ _.each(bp_wizard_data, function(obj, index) {
         result: button["Button Result"]["#markup"],
       };
     }),
-    sectionTitle:     sections_lookup[obj.field_section],
+    sectionTitle:     obj.field_section + ' / ' + sections_lookup[obj.field_section],
+    sectionId:        parseInt(obj.field_section),
     sectionCssId:     "section-" + obj.field_section,
     title:            obj.title,
     description:      obj.field_description
@@ -44,8 +48,25 @@ _.each(bp_wizard_data, function(obj, index) {
   namespace.collections.screens.add(s);
 });
 
-namespace.collections.screens.models[2].set({resultsPage: true}); // CHANGE to last().
+namespace.collections.screens.models[4].set({resultsPage: true}); // CHANGE to last() or FLag @TODO
 
 
 
+//////////////
+// Sections //
+//////////////
+
+namespace.collections.Sections = Backbone.Collection.extend({
+    model: namespace.models.Section
+});
+
+namespace.collections.sections = new namespace.collections.Sections();
+
+_.each(sections_lookup, function(t, id) {
+
+  var section = new namespace.models.Section({id: parseInt(id), title: t});
+  
+  namespace.collections.sections.add(section);
+
+});
 

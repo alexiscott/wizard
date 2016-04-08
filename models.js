@@ -3,14 +3,22 @@
 var namespace = namespace ||  {};
 namespace.models = {};
 
+
+////////////
+// Screen //
+////////////
+
 namespace.models.Screen = Backbone.Model.extend({
   defaults: {
     chosen: false,
     resultsPage: false,
   },
-
 });
 
 
+/////////////
+// Section //
+/////////////
 
+namespace.models.Section = Backbone.Model.extend({});
 
