@@ -28,17 +28,22 @@ namespace.views.Wizard = Backbone.View.extend({
     this.currentScreen = screenId;
   },
 
-  setResult: function(result) {
+  setDataResult: function(result) {
     if (!_.isEmpty(result)) {
-      this.model.set({result: result});
+      this.model.set({chosenResult: result});
     }
   },
   setScreenChosen: function() {
     this.model.set({chosen: true});
   },
 
+  isConfirmationScreen: function() {
+   return  parseInt(this.model.get("Confirmation Screen"));
+  },
+
   advanceScreen: function() {
-    if (this.selected) {
+    console.log("this", this.model.get("Confirmation Screen"));
+    if (this.selected && !this.isConfirmationScreen()) {
       this.selected = false;
       return true;
     }
@@ -59,13 +64,11 @@ namespace.views.Wizard = Backbone.View.extend({
 
   render: function(){
     
-    if (this.model.get("resultsPage")) {
-      console.log("Results Page: ");
+    if (this.model.get("Confirmation Screen") === "1") {
       var resultsView = new namespace.views.ResultsView({ collection: this.collection });
       return true;
     };
 
-    console.log("M", this.model);
     this.$el.html(this.screenTemplate(this.model.toJSON()));
     var buttonsView = new namespace.views.Buttons({ model: this.model });
     buttonsView.render();
@@ -117,14 +120,14 @@ namespace.views.Button = Backbone.View.extend({
   markSelected: function(event) {
     namespace.views.wizard.selected = true;
     namespace.views.wizard.setScreen($(event.currentTarget).attr("go-to-id"));
-    namespace.views.wizard.setResult($(event.currentTarget).attr("d-result"));
+    namespace.views.wizard.setDataResult($(event.currentTarget).attr("d-result"));
     this.$el.toggleClass("active");
     event.preventDefault();
 },
 
   render: function() {
     console.log(this);
-//    this.$el.attr("d-result", this.button["Button Result Text"]["#markup"]);
+    this.$el.attr("d-result", this.button["Button Result Text"]["#markup"]);
     this.$el.attr("go-to-id", this.button["Destination Screen"]["target_id"]);
     this.$el.attr("href", "#");
     this.$el.text(this.button["Button Title"]["#markup"]);
@@ -186,14 +189,13 @@ namespace.views.ResultsView = Backbone.View.extend({
   el: ".wizard__content--results-list",
 
   initialize: function() {
-    var that = this;
+    this.$el.append("<h5>Results</h5>");
     var r = _.each(namespace.collections.screens.chosen(), function(s) {
-      if (s.get("result") !== undefined) {
+      if (s.get("chosenResult") !== undefined) {
        var resultView =  new namespace.views.Result({model: s});
-       that.$el.append(resultView.render().el);
+       this.$el.append(resultView.render().el);
       }
-    }); 
-
+    }, this); 
   }
 });
 
@@ -206,7 +208,7 @@ namespace.views.Result = Backbone.View.extend({
   tagName: "li",
   
   render: function() {
-    this.$el.text(this.model.get("result"));    
+    this.$el.html(this.model.get("chosenResult"));    
     return this;
   }
 
