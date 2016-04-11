@@ -70,6 +70,7 @@ namespace.views.Wizard = Backbone.View.extend({
     } else {
       this.$el.html(this.screenTemplate(this.model.toJSON()));
       $("#wizard").css("background", this.model.get("Color"));
+      // @TODO fix button selection class logic
       var buttonsView = new namespace.views.Buttons({ model: this.model });
       buttonsView.render();
     }
@@ -230,6 +231,7 @@ namespace.views.Progress = Backbone.View.extend({
   render: function() {
     this.$el.find("ul").remove();
     this.$el.find("li").remove();
+
     var progress = namespace.collections.sections.models;
 
     _.each(progress, function(section) {
@@ -266,20 +268,23 @@ namespace.views.SectionSteps = Backbone.View.extend({
   initialize: function(options) {
     this.options = options || {};
     this.sectionId = this.options.sectionId;
-    this.on("h", this.render);
   },
 
   render:function() {
-    var screens = namespace.collections.screens.where({sectionId: this.sectionId});
+    
+    // @TODO move this method into the collection.
+    // @TODO Sort screen by section ID.
+    var screens = _.filter(namespace.collections.screens.models, function(s){
+      return s.attributes.section.tid === this.sectionId;
+    }, this);
+
     var graphic;    
     _.each(screens, function(s) {
-
-      if (s.get("id") === namespace.views.wizard.model.get("id")) {
+      if (s.get("Nid") === namespace.views.wizard.model.get("Nid")) {
         graphic = " O ";
       } else {
         graphic = " | ";
       }
-
       var sectionStepItem = new namespace.views.SectionStepItem({graphic: graphic}).render().el;
       this.$el.append(sectionStepItem);
     }, this );

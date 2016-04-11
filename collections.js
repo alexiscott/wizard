@@ -18,3 +18,15 @@ namespace.collections.Screens = Backbone.Collection.extend({
 });
 
 
+//////////////
+// Sections //
+//////////////
+
+namespace.collections.Sections = Backbone.Collection.extend({
+    model: namespace.models.Section
+});
+
+namespace.collections.sections = new namespace.collections.Sections();
+
+
+

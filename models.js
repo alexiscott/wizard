@@ -14,8 +14,15 @@ namespace.models.Screen = Backbone.Model.extend({
     title: "",
     description: "",
     buttons: [],
-    Color: "#DDD"
+    Color: "#EEEEEE"
 
   },
 });
+
+
+/////////////
+// Section //
+/////////////
+
+namespace.models.Section = Backbone.Model.extend({});
 
