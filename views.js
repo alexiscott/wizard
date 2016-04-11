@@ -11,12 +11,6 @@ _.templateSettings = {
 // Wizard //
 ////////////
 
-var obj = {
-  t: function() {
-    console.log("fired t");
-  }
-}
-
 namespace.views.Wizard = Backbone.View.extend({
 
   tagName: 'div',
@@ -26,7 +20,7 @@ namespace.views.Wizard = Backbone.View.extend({
   selected: false,
 
   getCurrentScreen: function() {
-    return parseInt(this.currentScreen);
+    return this.currentScreen;
   },
 
   /* Set the currentScreen Property. */
@@ -61,16 +55,17 @@ namespace.views.Wizard = Backbone.View.extend({
     return false;
   },
 
-  screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{sectionTitle}}</h1>{{ title }} <br /> <div class="wizard__tip">{{ description}}</div>'),
+  screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{section.tid}}</h1>{{ title }} <br /> <div class="wizard__tip">{{Description}}</div>'),
 
   render: function(){
-
+    
     if (this.model.get("resultsPage")) {
       console.log("Results Page: ");
       var resultsView = new namespace.views.ResultsView({ collection: this.collection });
       return true;
     };
 
+    console.log("M", this.model);
     this.$el.html(this.screenTemplate(this.model.toJSON()));
     var buttonsView = new namespace.views.Buttons({ model: this.model });
     buttonsView.render();
@@ -88,11 +83,10 @@ namespace.views.Buttons = Backbone.View.extend({
   render: function() {
     this.$el.find("a").remove();
     var buttons = this.model.get("buttons");
-    var that = this;
      _.each(buttons, function(b) {
-       var buttonView =  new namespace.views.Button({button: b, model: that.model});
-       that.$el.append(buttonView.render().el);
-    });
+       var buttonView =  new namespace.views.Button({button: b, model: this.model});
+       this.$el.append(buttonView.render().el);
+    }, this);
     return this;
   }
 });
@@ -110,6 +104,7 @@ namespace.views.Button = Backbone.View.extend({
   initialize: function(options) {
     this.options = options || {};
     this.button = this.options.button;
+    console.log(this.button);
   },
 
   events: {
@@ -128,10 +123,11 @@ namespace.views.Button = Backbone.View.extend({
 },
 
   render: function() {
-    this.$el.attr("d-result", this.button.result);
-    this.$el.attr("go-to-id", this.button.dest);
+    console.log(this);
+//    this.$el.attr("d-result", this.button["Button Result Text"]["#markup"]);
+    this.$el.attr("go-to-id", this.button["Destination Screen"]["target_id"]);
     this.$el.attr("href", "#");
-    this.$el.text(this.button.title);
+    this.$el.text(this.button["Button Title"]["#markup"]);
     return this;
   }
 });
@@ -167,7 +163,13 @@ namespace.views.Nav = Backbone.View.extend({
   render: function() {
     namespace.views.wizard.setScreenChosen();
     namespace.views.wizard.remove();
-    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({id: namespace.views.wizard.getCurrentScreen() }) });
+
+     namespace.views.wizard = new namespace.views.Wizard({ 
+       model : namespace.collections.screens.find({
+         Nid: namespace.views.wizard.getCurrentScreen()
+       }) 
+     });
+
     Backbone.trigger("current:update");
     $(".wizard__content-block").append(namespace.views.wizard.render().el);
   }

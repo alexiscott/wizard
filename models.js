@@ -12,6 +12,10 @@ namespace.models.Screen = Backbone.Model.extend({
   defaults: {
     chosen: false,
     resultsPage: false,
+    title: "",
+    description: "",
+    buttons: []
+
   },
 });
 
