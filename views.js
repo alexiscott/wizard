@@ -38,11 +38,10 @@ namespace.views.Wizard = Backbone.View.extend({
   },
 
   isConfirmationScreen: function() {
-   return  parseInt(this.model.get("Confirmation Screen"));
+   return parseInt(this.model.get("Confirmation Screen"));
   },
 
   advanceScreen: function() {
-    console.log("this", this.model.get("Confirmation Screen"));
     if (this.selected && !this.isConfirmationScreen()) {
       this.selected = false;
       return true;
@@ -60,18 +59,20 @@ namespace.views.Wizard = Backbone.View.extend({
     return false;
   },
 
-  screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{section.tid}}</h1>{{ title }} <br /> <div class="wizard__tip">{{Description}}</div>'),
+  screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{section.tid}} / {{Name}} </h1>{{ title }} <br /> <div class="wizard__tip">{{Description}}</div>'),
 
   render: function(){
     
+    // If on the results page just print that out:
     if (this.model.get("Confirmation Screen") === "1") {
       var resultsView = new namespace.views.ResultsView({ collection: this.collection });
       return true;
-    };
-
-    this.$el.html(this.screenTemplate(this.model.toJSON()));
-    var buttonsView = new namespace.views.Buttons({ model: this.model });
-    buttonsView.render();
+    } else {
+      this.$el.html(this.screenTemplate(this.model.toJSON()));
+      $("#wizard").css("background", this.model.get("Color"));
+      var buttonsView = new namespace.views.Buttons({ model: this.model });
+      buttonsView.render();
+    }
     return this;
   }
 });
@@ -107,7 +108,6 @@ namespace.views.Button = Backbone.View.extend({
   initialize: function(options) {
     this.options = options || {};
     this.button = this.options.button;
-    console.log(this.button);
   },
 
   events: {
@@ -126,7 +126,6 @@ namespace.views.Button = Backbone.View.extend({
 },
 
   render: function() {
-    console.log(this);
     this.$el.attr("d-result", this.button["Button Result Text"]["#markup"]);
     this.$el.attr("go-to-id", this.button["Destination Screen"]["target_id"]);
     this.$el.attr("href", "#");
