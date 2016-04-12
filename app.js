@@ -14,7 +14,9 @@ namespace.collections.screens.fetch({
 
     // @TODO -add first screen checkbox to drupal.
     // Initialize the Wizard for rendering.
-    namespace.views.wizard = new namespace.views.Wizard({ model : namespace.collections.screens.find({screen_id: "1"}) });
+    namespace.views.wizard = new namespace.views.Wizard({
+      model: namespace.collections.screens.find({Nid: "19"}, this)
+    });
     
     // Set the current screen on the wizard.
     namespace.views.wizard.setScreen(namespace.collections.screens.first().get("id"));
