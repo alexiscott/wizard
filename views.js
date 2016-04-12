@@ -11,6 +11,9 @@ _.templateSettings = {
 // Wizard //
 ////////////
 
+(function($) {
+
+
 namespace.views.Wizard = Backbone.View.extend({
 
   tagName: 'div',
@@ -307,3 +310,5 @@ namespace.views.SectionStepItem = Backbone.View.extend({
     return this;
   }
 });
+
+})(jQuery);
