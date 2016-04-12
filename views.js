@@ -62,7 +62,7 @@ namespace.views.Wizard = Backbone.View.extend({
     return false;
   },
 
-  screenTemplate: _.template('<div class="wizard__header">{{section.tid}} / {{Name}}</div><div class="wizard__header-line" /> <div class="wizard__question">{{ title }}</div> <div class="wizard__tip">{{Description}}</div>'),
+  screenTemplate: _.template('<div class="wizard__header">{{section.tid}} / {{Name}}</div><div class="wizard__header-line" /> <h1 class="wizard__question">{{ title }}</h1> <div class="wizard__tip">{{Description}}</div>'),
  
 
   render: function(){
@@ -74,10 +74,10 @@ namespace.views.Wizard = Backbone.View.extend({
     } else {
       this.$el.html(this.screenTemplate(this.model.toJSON()));
       $("#wizard").css("background", this.model.get("Color"));
-      // @TODO fix button selection class logic
-      var buttonsView = new namespace.views.Buttons({ model: this.model });
-      buttonsView.render();
-    }
+        var buttonsView = new namespace.views.Buttons({ model: this.model });
+        buttonsView.render();
+      }
+//    }
     return this;
   }
 });
@@ -91,11 +91,14 @@ namespace.views.Buttons = Backbone.View.extend({
 
   render: function() {
     this.$el.find("a").remove();
+      // @TODO fix button selection class logic
     var buttons = this.model.get("buttons");
-     _.each(buttons, function(b) {
-       var buttonView =  new namespace.views.Button({button: b, model: this.model});
-       this.$el.append(buttonView.render().el);
-    }, this);
+      if (buttons.length > 0) {
+        _.each(buttons, function(b) {
+          var buttonView =  new namespace.views.Button({button: b, model: this.model});
+          this.$el.append(buttonView.render().el);
+        }, this);
+      }
     return this;
   }
 });
@@ -170,7 +173,6 @@ namespace.views.Nav = Backbone.View.extend({
   render: function() {
     namespace.views.wizard.setScreenChosen();
     namespace.views.wizard.remove();
-
      namespace.views.wizard = new namespace.views.Wizard({ 
        model : namespace.collections.screens.find({
          Nid: namespace.views.wizard.getCurrentScreen()
