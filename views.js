@@ -22,6 +22,10 @@ namespace.views.Wizard = Backbone.View.extend({
 
   selected: false,
 
+  toggleSelected: function() {
+    this.selected = !this.selected;
+  },
+
   getCurrentScreen: function() {
     return this.currentScreen;
   },
@@ -69,7 +73,10 @@ namespace.views.Wizard = Backbone.View.extend({
     
     // If on the results page just print that out:
     if (this.model.get("Confirmation Screen") === "1") {
-      var resultsView = new namespace.views.ResultsView({ collection: this.collection });
+      var resultsView = new namespace.views.ResultsView(
+        { collection: this.collection}
+      );
+      Backbone.trigger("buttonstate:deselected");
       return true;
     } else {
       this.$el.html(this.screenTemplate(this.model.toJSON()));
@@ -91,7 +98,6 @@ namespace.views.Buttons = Backbone.View.extend({
 
   render: function() {
     this.$el.find("a").remove();
-      // @TODO fix button selection class logic
     var buttons = this.model.get("buttons");
       if (buttons.length > 0) {
         _.each(buttons, function(b) {
@@ -126,10 +132,18 @@ namespace.views.Button = Backbone.View.extend({
    * And setup the next screen from the DOM.
    */
   markSelected: function(event) {
-    namespace.views.wizard.selected = true;
+    namespace.views.wizard.toggleSelected();
+
+    if (namespace.views.wizard.selected) {
+      this.$el.addClass("wizard__button--selected");
+      Backbone.trigger("buttonstate:selected");
+    } else {
+      $(".wizard__button").removeClass("wizard__button--selected");
+      Backbone.trigger("buttonstate:deselected");
+    }
+  
     namespace.views.wizard.setScreen($(event.currentTarget).attr("go-to-id"));
     namespace.views.wizard.setDataResult($(event.currentTarget).attr("d-result"));
-    this.$el.toggleClass("active");
     event.preventDefault();
 },
 
@@ -149,6 +163,19 @@ namespace.views.Button = Backbone.View.extend({
 namespace.views.Nav = Backbone.View.extend({
   el: ".wizard__nav",
   
+  initialize: function() {
+    Backbone.on("buttonstate:selected", this.arrowVisibilityOn, this);
+    Backbone.on("buttonstate:deselected", this.arrowVisibilityOff, this);
+  },
+
+  arrowVisibilityOn: function() {
+    this.$el.find(".wizard__arrow-down").addClass("active");
+  },
+
+  arrowVisibilityOff: function() {
+    this.$el.find(".wizard__arrow-down").removeClass("active");
+  },
+
   events:  {
     "click .wizard__arrow-up": "backArrowClick",
     "click .wizard__arrow-down": "forwardArrowClick"
