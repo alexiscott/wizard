@@ -62,7 +62,8 @@ namespace.views.Wizard = Backbone.View.extend({
     return false;
   },
 
-  screenTemplate: _.template('<h1 id="section-title" class="wizard__question">{{section.tid}} / {{Name}} </h1>{{ title }} <br /> <div class="wizard__tip">{{Description}}</div>'),
+  screenTemplate: _.template('<div class="wizard__header">{{section.tid}} / {{Name}}</div><div class="wizard__header-line" /> <div class="wizard__question">{{ title }}</div> <div class="wizard__tip">{{Description}}</div>'),
+ 
 
   render: function(){
     
@@ -225,7 +226,7 @@ namespace.views.Result = Backbone.View.extend({
 
 namespace.views.Progress = Backbone.View.extend({
   
-  el: ".wizard__progress-bar",
+  el: ".wizard__progress-box",
 
   initialize: function() {
     Backbone.on("current:update", this.render, this);

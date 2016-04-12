@@ -5,106 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Hello World in Backbone.js</title>
   <style>
-    .active {
-    font-weight: bold;
-    }
-
-    .wizard__content-block {
-    display: inline-block;
-    border: 0 solid black;
-    width: 70%;
-    padding: 25px;
-    }
-    .wizard__header {
-    font-weight: 700;
-    font-size: 1em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 0;
-    margin: 0 0 15px;
-    }
-
-.wizard__header--intro {
-  font-weight: 700;
-  font-size: 1.5em;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 0;
-  padding: 0;
-  margin: 0 0 15px;
-}
-
-.wizard__question {
-  font-weight: 400;
-  font-size: 1.667em;
-}
-
-.wizard__buttons {
-  border: 0 solid white;
-
-}
-.wizard__button {
-  background-color: white;
-  padding: 8px 30px;
-  font-weight: bold;
-  display: inline-block;
-  margin: 0 10px 0 0;
-}
-
-.wizard__button.active {
-  background: #DDDDDD;
-}
-
-.wizard__button {
-    @include border-radius(20px);
-    padding: 8px 35px 8px 35px;
-    font-weight: bold;
-    display: inline-block;
-    margin: 0 10px 0 0;
-    cursor: pointer;
-}
-.wizard__button a {
-  color: $wizard_text;
-  text-decoration: none;
-
-}
-.wizard__button--selected {
-  @include wizard__button--base;
-  background-color: $wizard__button--selected;
-
-}
-.wizard__button--selected a {
-  text-decoration: none;
-  color: $wizard__button_text--selected;
-
-}
-
-.wizard__nav {
-  display: inline-block;
-  width: 70%;
-  float: left;
-
-}
-.wizard__arrow-up {
-//  background-image: image-url("arrow_up.png");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  margin: 0 10px 0 24px;
-  width: 24px;
-  height: 25px;
-
-}
-.wizard__arrow-down--filled {
-  background-image: image-url("arrow_down_filled.png");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  width: 320px;
-  height: 94px;
-  margin-top: 5px;
-
-}
-
-
+    @import "http://homer/profiles/labp/themes/la/lasbptheme/css/styles.css"
     </style>
 </head>
 <body>
@@ -133,8 +34,12 @@
       <a href="#" class="wizard__arrow-down">forward</a>
     </div>
 
-    <ul class="wizard__progress-bar">
-    </ul>
+    <div class="wizard__progress-bar">
+       <div class="wizard__progress-bar-indicator"></div>
+    </div>
+    <ul class="wizard__progress-box"></ul>
+
+
 
   </div> <!-- Close #wizard -->
 
