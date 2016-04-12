@@ -255,10 +255,11 @@ namespace.views.Result = Backbone.View.extend({
 
 namespace.views.Progress = Backbone.View.extend({
   
-  el: ".wizard__progress-box",
+  el: ".wizard__progress-drawer",
 
   initialize: function() {
     Backbone.on("current:update", this.render, this);
+    this.$el.hide();
   },
 
   render: function() {
