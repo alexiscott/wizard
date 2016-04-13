@@ -31,8 +31,9 @@ namespace.collections.screens.fetch({
     // Initialize the Nav 
     new namespace.views.Nav();
 
-    // Initialize the Progress bar.
-    new namespace.views.Progress().render().el;
+    // Initialize the Progress bar and progress draw.
+    new namespace.views.ProgressBar().render().el;
+    new namespace.views.ProgressDrawer().render().el;
 
     // Render the wizard.
     $(".wizard__content-block").html(namespace.views.wizard.render().el);

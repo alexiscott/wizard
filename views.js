@@ -248,18 +248,45 @@ namespace.views.Result = Backbone.View.extend({
 });
 
 
-//////////////
-// Progress //
-//////////////
+//////////////////
+// Progress Bar //
+//////////////////
+
+namespace.views.ProgressBar = Backbone.View.extend({
+  
+  el: ".wizard__progress-bar",
+
+  initialize: function() {
+    this.$el.addClass("section-1");
+    Backbone.on("current:update", this.changeIndicator, this);
+  },
+
+  changeIndicator: function() {
+    this.$el.removeClass(function(index, css) {
+      return (css.match (/\bsection-\S+/g) || []).join(' ');
+    });
+    this.$el.addClass("section-" + namespace.views.wizard.model.get("section").tid);
+  },
+
+  render: function() {
+    return this;
+  }
+
+});
 
 
-namespace.views.Progress = Backbone.View.extend({
+/////////////////////
+// Progress Drawer //
+/////////////////////
+
+namespace.views.ProgressDrawer = Backbone.View.extend({
   
   el: ".wizard__progress-drawer",
 
   initialize: function() {
     Backbone.on("current:update", this.render, this);
-    this.$el.hide();
+//    this.$el.hide();
+    this.$el.css("background", "#ccc");
   },
 
   render: function() {
