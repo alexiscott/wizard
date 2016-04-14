@@ -13,6 +13,9 @@ _.templateSettings = {
 
 (function($) {
 
+namespace.controller = {
+  lastScreen: undefined,
+}
 
 namespace.views.Wizard = Backbone.View.extend({
 
@@ -57,12 +60,11 @@ namespace.views.Wizard = Backbone.View.extend({
   },
 
   goBackScreen: function() {
-    // @TODO Check for multiple back clicks.
-    if (this.getCurrentScreen !== 0) {
-      var chosen = _.last(namespace.collections.screens.chosen());
-      this.setScreen(chosen.get("id"));
+    console.log(namespace.controller.lastScreen);
+    if (namespace.controller.lastScreen !== undefined) {
+      this.setScreen(namespace.controller.lastScreen);
       return true;
-    }
+    } 
     return false;
   },
 
@@ -200,6 +202,7 @@ namespace.views.Nav = Backbone.View.extend({
   render: function() {
     namespace.views.wizard.setScreenChosen();
     namespace.views.wizard.remove();
+    namespace.controller.lastScreen = namespace.views.wizard.model.get("Nid");
      namespace.views.wizard = new namespace.views.Wizard({ 
        model : namespace.collections.screens.find({
          Nid: namespace.views.wizard.getCurrentScreen()
