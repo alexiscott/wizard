@@ -7,21 +7,14 @@ _.templateSettings = {
 
 };
 
-////////////
-// Wizard //
-////////////
 
 (function($) {
 
+////////////////
+// Controller //
+////////////////
+
 namespace.controller = {
-  lastScreen: undefined,
-}
-
-namespace.views.Wizard = Backbone.View.extend({
-
-  tagName: 'div',
-
-  currentScreen: undefined,
 
   selected: false,
 
@@ -29,64 +22,23 @@ namespace.views.Wizard = Backbone.View.extend({
     this.selected = !this.selected;
   },
 
-  getCurrentScreen: function() {
-    return this.currentScreen;
-  },
+}
 
-  /* Set the currentScreen Property. */
-  setScreen: function(screenId) {
-    this.currentScreen = screenId;
-  },
 
-  setDataResult: function(result) {
-    if (!_.isEmpty(result)) {
-      this.model.set({chosenResult: result});
-    }
-  },
-  setScreenChosen: function() {
-    this.model.set({chosen: true});
-  },
+////////////
+// Wizard //
+////////////
 
-  isConfirmationScreen: function() {
-   return parseInt(this.model.get("Confirmation Screen"));
-  },
+namespace.views.Wizard = Backbone.View.extend({
 
-  advanceScreen: function() {
-    if (this.selected && !this.isConfirmationScreen()) {
-      this.selected = false;
-      return true;
-    }
-   return false;
-  },
+  tagName: 'div',
 
-  goBackScreen: function() {
-    console.log(namespace.controller.lastScreen);
-    if (namespace.controller.lastScreen !== undefined) {
-      this.setScreen(namespace.controller.lastScreen);
-      return true;
-    } 
-    return false;
-  },
-
-  screenTemplate: _.template('<div class="wizard__header">{{section.tid}} / {{Name}}</div><div class="wizard__header-line" /> <h1 class="wizard__question">{{ title }}</h1> <div class="wizard__tip">{{Description}}</div>'),
+  screenTemplate: _.template('<div class="wizard__header">{{section.tid}} / {{Name}}</div><div class="wizard__header-line" /> <h1 class="wizard__question">{{ title }} ({{Nid}})</h1> <div class="wizard__tip">{{Description}}</div>'),
  
-
-  render: function(){
-    
-    // If on the results page just print that out:
-    if (this.model.get("Confirmation Screen") === "1") {
-      var resultsView = new namespace.views.ResultsView(
-        { collection: this.collection}
-      );
-      Backbone.trigger("buttonstate:deselected");
-      return true;
-    } else {
-      this.$el.html(this.screenTemplate(this.model.toJSON()));
-      $("#wizard").css("background", this.model.get("Color"));
-        var buttonsView = new namespace.views.Buttons({ model: this.model });
-        buttonsView.render();
-      }
-//    }
+  render: function() {
+    this.$el.html(this.screenTemplate(this.model.toJSON()));
+    var buttons = new namespace.views.Buttons({ model: this.model });
+    buttons.render().el;
     return this;
   }
 });
@@ -102,9 +54,12 @@ namespace.views.Buttons = Backbone.View.extend({
     this.$el.find("a").remove();
     var buttons = this.model.get("buttons");
       if (buttons.length > 0) {
-        _.each(buttons, function(b) {
-          var buttonView =  new namespace.views.Button({button: b, model: this.model});
-          this.$el.append(buttonView.render().el);
+        _.each(buttons, function(b, index) {
+          var button =  new namespace.views.Button({
+            button: b, model: this.model,
+            index: index
+          });
+          this.$el.append(button.render().el);
         }, this);
       }
     return this;
@@ -124,35 +79,27 @@ namespace.views.Button = Backbone.View.extend({
   initialize: function(options) {
     this.options = options || {};
     this.button = this.options.button;
+    this.index = this.options.index;
   },
 
   events: {
     "click": "markSelected"
   },
 
-  /* Mark selected, used for forward arrow functionality. 
-   * And setup the next screen from the DOM.
-   */
   markSelected: function(event) {
-    namespace.views.wizard.toggleSelected();
-
-    if (namespace.views.wizard.selected) {
-      this.$el.addClass("wizard__button--selected");
-      Backbone.trigger("buttonstate:selected");
+    namespace.controller.toggleSelected();
+    if (namespace.controller.selected) {
+      namespace.controller.bid =  $(event.currentTarget).attr("id");
+     this.$el.addClass("wizard__button--selected");
     } else {
-      $(".wizard__button").removeClass("wizard__button--selected");
-      Backbone.trigger("buttonstate:deselected");
+     $(".wizard__button").removeClass("wizard__button--selected");
     }
-  
-    namespace.views.wizard.setScreen($(event.currentTarget).attr("go-to-id"));
-    namespace.views.wizard.setDataResult($(event.currentTarget).attr("d-result"));
     event.preventDefault();
 },
 
   render: function() {
-    this.$el.attr("d-result", this.button["Button Result Text"]["#markup"]);
-    this.$el.attr("go-to-id", this.button["Destination Screen"]["target_id"]);
     this.$el.attr("href", "#");
+    this.$el.attr("id", "button-id-" + this.index);
     this.$el.text(this.button["Button Title"]["#markup"]);
     return this;
   }
@@ -165,53 +112,22 @@ namespace.views.Button = Backbone.View.extend({
 namespace.views.Nav = Backbone.View.extend({
   el: ".wizard__nav",
   
-  initialize: function() {
-    Backbone.on("buttonstate:selected", this.arrowVisibilityOn, this);
-    Backbone.on("buttonstate:deselected", this.arrowVisibilityOff, this);
-  },
-
-  arrowVisibilityOn: function() {
-    this.$el.find(".wizard__arrow-down").addClass("active");
-  },
-
-  arrowVisibilityOff: function() {
-    this.$el.find(".wizard__arrow-down").removeClass("active");
-  },
-
   events:  {
     "click .wizard__arrow-up": "backArrowClick",
     "click .wizard__arrow-down": "forwardArrowClick"
   },
 
   backArrowClick: function(event) {
-    if(namespace.views.wizard.goBackScreen()) {
-      this.render();
-    };
-
+    namespace.collections.screens.next();
     event.preventDefault();
   },
 
   forwardArrowClick: function(event) {
-
-    if(namespace.views.wizard.advanceScreen()) {
-      this.render();
-    }
+    namespace.collections.screens.next(namespace.controller.bid);
     event.preventDefault();
   },
 
-  render: function() {
-    namespace.views.wizard.setScreenChosen();
-    namespace.views.wizard.remove();
-    namespace.controller.lastScreen = namespace.views.wizard.model.get("Nid");
-     namespace.views.wizard = new namespace.views.Wizard({ 
-       model : namespace.collections.screens.find({
-         Nid: namespace.views.wizard.getCurrentScreen()
-       }) 
-     });
-
-    Backbone.trigger("current:update");
-    $(".wizard__content-block").append(namespace.views.wizard.render().el);
-  }
+  render: function() {}
 
 });
 
@@ -221,18 +137,7 @@ namespace.views.Nav = Backbone.View.extend({
 ////////////////////////
 
 namespace.views.ResultsView = Backbone.View.extend({
-
   el: ".wizard__content--results-list",
-
-  initialize: function() {
-    this.$el.append("<h5>Results</h5>");
-    var r = _.each(namespace.collections.screens.chosen(), function(s) {
-      if (s.get("chosenResult") !== undefined) {
-       var resultView =  new namespace.views.Result({model: s});
-       this.$el.append(resultView.render().el);
-      }
-    }, this); 
-  }
 });
 
 ////////////
@@ -241,12 +146,7 @@ namespace.views.ResultsView = Backbone.View.extend({
 
 namespace.views.Result = Backbone.View.extend({
   
-  tagName: "li",
-  
-  render: function() {
-    this.$el.html(this.model.get("chosenResult"));    
-    return this;
-  }
+  tagName: "li"
 
 });
 

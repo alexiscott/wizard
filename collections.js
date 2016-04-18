@@ -9,12 +9,22 @@ namespace.collections.Screens = Backbone.Collection.extend({
 
   model: namespace.models.Screen,
 
-  url: "http://homer/api/json/business-portal-wizard",
+  url: "http://localhost:3412",
 
-  chosen: function () {
-    return this.where({chosen: true});
-  },
+  next: function(bid) {
+    var m = this.find({current: true}), nm;
+    m.set({current: false});
+    nm = this.find({Nid: m.get("buttons")[bid.charAt(bid.length - 1)]["Destination Screen"]["target_id"]});
+
+    namespace.views.wizard = new namespace.views.Wizard({
+      model: nm
+    });
     
+    nm.set({current: true});
+
+  }
+
+
 });
 
 
@@ -23,7 +33,8 @@ namespace.collections.Screens = Backbone.Collection.extend({
 //////////////
 
 namespace.collections.Sections = Backbone.Collection.extend({
-    model: namespace.models.Section
+  model: namespace.models.Section
+
 });
 
 namespace.collections.sections = new namespace.collections.Sections();

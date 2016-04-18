@@ -15,8 +15,23 @@ namespace.models.Screen = Backbone.Model.extend({
     description: "",
     buttons: [],
     Color: "#EEEEEE"
+  },
+
+  initialize: function() {
+
+    this.on('change:current', function(){
+
+      namespace.views.wizard.remove();    
+      // Initialize wizard again.
+      console.log("change event");
+
+      $(".wizard__content-block").html(namespace.views.wizard.render().el);
+
+    });
 
   },
+
+
 });
 
 
