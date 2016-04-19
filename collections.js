@@ -42,6 +42,14 @@ namespace.collections.Screens = Backbone.Collection.extend({
     this.logging();
   },
 
+  getResults: function() {
+    return _.map(namespace.controller.chosen, function(s) {
+      return this.find({
+        Nid: s
+      }).get("buttons")[0]["Button Result Text"]["#markup"]; // HARDCODE.
+    }, this);
+  },
+
   logging: function() {
     console.log(namespace.controller.chosen);
   },

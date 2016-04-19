@@ -38,9 +38,19 @@ namespace.views.Wizard = Backbone.View.extend({
   screenTemplate: _.template('<div class="wizard__header">{{section.tid}} / {{Name}}</div><div class="wizard__header-line" /> <h1 class="wizard__question">{{ title }} ({{Nid}})</h1> <div class="wizard__tip">{{Description}}</div>'),
  
   render: function() {
-    this.$el.html(this.screenTemplate(this.model.toJSON()));
-    var buttons = new namespace.views.Buttons({ model: this.model });
-    buttons.render().el;
+
+ if (this.model.get("Confirmation Screen") === "1") {
+      var resultsView = new namespace.views.ResultsView(
+        { collection: this.collection}
+      );
+      Backbone.trigger("buttonstate:deselected");
+      return true;
+    } else {
+      this.$el.html(this.screenTemplate(this.model.toJSON()));
+      $("#wizard").css("background", this.model.get("Color"));
+        var buttonsView = new namespace.views.Buttons({ model: this.model });
+        buttonsView.render();
+      }
     return this;
   }
 });
@@ -140,6 +150,18 @@ namespace.views.Nav = Backbone.View.extend({
 
 namespace.views.ResultsView = Backbone.View.extend({
   el: ".wizard__content--results-list",
+
+  initialize: function() {
+    this.$el.append("<h5>Results</h5>");
+    var results = [];
+    results = namespace.collections.screens.getResults();
+    console.log(results);
+    _.each(results, function(r) {
+      var resultView = new namespace.views.Result({result: r});
+      this.$el.append(resultView.render().el);
+    }, this);
+
+  }
 });
 
 ////////////
@@ -148,7 +170,17 @@ namespace.views.ResultsView = Backbone.View.extend({
 
 namespace.views.Result = Backbone.View.extend({
   
-  tagName: "li"
+  tagName: "li",
+
+  initialize: function(options) {
+    this.result = options.result;
+  },
+
+  render: function() {
+    this.$el.html(this.result);
+    return this;
+  }
+
 
 });
 
