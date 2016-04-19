@@ -17,7 +17,10 @@ namespace.collections.screens.fetch({
       model: namespace.collections.screens.find({Nid: "19"}, this)
     });
     
-    namespace.views.wizard.model.set({current: true});
+    namespace.views.wizard.model.set({
+      current: true, 
+      first: true, 
+      chosen: true});
 
     // Add sections models to the sections collection.
     _.each(data.models, function(screen) {

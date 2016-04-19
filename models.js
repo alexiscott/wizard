@@ -14,7 +14,8 @@ namespace.models.Screen = Backbone.Model.extend({
     title: "",
     description: "",
     buttons: [],
-    Color: "#EEEEEE"
+    Color: "#EEEEEE",
+    order: null
   },
 
   initialize: function() {

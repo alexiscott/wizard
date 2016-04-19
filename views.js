@@ -22,6 +22,8 @@ namespace.controller = {
     this.selected = !this.selected;
   },
 
+  chosen: []
+
 }
 
 
@@ -118,16 +120,16 @@ namespace.views.Nav = Backbone.View.extend({
   },
 
   backArrowClick: function(event) {
-    namespace.collections.screens.next();
+    namespace.collections.screens.prev();
     event.preventDefault();
   },
 
   forwardArrowClick: function(event) {
-    namespace.collections.screens.next(namespace.controller.bid);
+    if (namespace.controller.selected) {
+      namespace.collections.screens.next(namespace.controller.bid);
+    }
     event.preventDefault();
-  },
-
-  render: function() {}
+  }
 
 });
 
