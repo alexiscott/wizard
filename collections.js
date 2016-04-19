@@ -38,15 +38,21 @@ namespace.collections.Screens = Backbone.Collection.extend({
     namespace.views.wizard = new namespace.views.Wizard({
       model: nm
     });    
-    nm.set({chosen: true, current: true});
+    nm.set({chosen: true, current: true, bid: bid});
     this.logging();
   },
 
   getResults: function() {
     return _.map(namespace.controller.chosen, function(s) {
-      return this.find({
+      var m;
+      m = this.find({
         Nid: s
-      }).get("buttons")[0]["Button Result Text"]["#markup"]; // HARDCODE.
+      });      
+      console.log("m", m);
+      var bid = m.get("bid");
+      return m.get("buttons")[bid.charAt(bid.length - 1)]["Button Result Text"]["#markup"]; 
+      
+
     }, this);
   },
 

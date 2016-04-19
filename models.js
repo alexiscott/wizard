@@ -25,7 +25,7 @@ namespace.models.Screen = Backbone.Model.extend({
       namespace.views.wizard.remove();    
       // Initialize wizard again.
       console.log("change event");
-
+      Backbone.trigger("current:update");
       $(".wizard__content-block").html(namespace.views.wizard.render().el);
 
     });

@@ -259,6 +259,8 @@ namespace.views.Section = Backbone.View.extend({
 });
 
 
+
+
 namespace.views.SectionSteps = Backbone.View.extend({
 
   tagName: "ul",

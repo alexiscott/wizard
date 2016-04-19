@@ -28,6 +28,10 @@ namespace.collections.screens.fetch({
       namespace.collections.sections.add(section);
     });
 
+    // Initialize the Progress bar and progress draw.
+    new namespace.views.ProgressBar().render().el;
+    new namespace.views.ProgressDrawer().render().el;
+
     // Initialize nav.
     new namespace.views.Nav({});
 
