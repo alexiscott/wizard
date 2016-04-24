@@ -1,41 +1,40 @@
-var namespace = namespace || {};
 
-(function($) { 
+var wiz = wiz || {};
 
-  ///////////////////////////////////////////
-  // Create backbone collection "screens". //
-  ///////////////////////////////////////////
+(function($) {
+  $( document ).ready(function() {
 
-namespace.collections.screens = new namespace.collections.Screens();
-
-namespace.collections.screens.fetch({
-
-  success: function(data) {
     
-    // Initialize the Wizard for rendering with the first model.
-    namespace.views.wizard = new namespace.views.Wizard({
-      model: namespace.collections.screens.find({Nid: "19"}, this)
+    window.wiz.instance = new wiz.views.App();
+
+    // Initialize collection.
+    wiz.collections.screens = new wiz.collections.Screens();
+    wiz.collections.screens.fetch({
+
+      async: false,
+
+      success: function(data) {
+
+        // Add the start screen to the chosen collection.
+        var m = wiz.collections.screens.find({"screen-type": "start"}, this);
+        if (m === undefined) {
+          console.log("APP ERROR: You will need a start screen defined.");
+          return;
+        } else {
+          wiz.collections.chosen.add(m);
+        }
+
+        // Add sections models to the sections collection.
+        _.each(data.models, function(screen) {
+          var section = new wiz.models.Section({id: screen.get("section").tid, title: screen.get("Name")});
+          wiz.collections.sections.add(section);
+        });
+      },
+
+      error: function(collection, response, options) {
+        console.log("Fetch error: ")
+      }
+
     });
-    
-    namespace.views.wizard.model.set({
-      current: true, 
-      first: true, 
-      chosen: true});
-
-    // Add sections models to the sections collection.
-    _.each(data.models, function(screen) {
-     var section = new namespace.models.Section({id: screen.get("section").tid, title: screen.get("Name")});
-      namespace.collections.sections.add(section);
-    });
-
-    // Initialize the Progress bar and progress draw.
-    new namespace.views.ProgressBar().render().el;
-    new namespace.views.ProgressDrawer().render().el;
-
-    // Initialize nav.
-    new namespace.views.Nav({});
-
-  }
-});
-
+  });
 })(jQuery);

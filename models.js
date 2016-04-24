@@ -1,38 +1,42 @@
   // Model constructor Screen.
 
-var namespace = namespace ||  {};
-namespace.models = {};
+var wiz = wiz ||  {};
+wiz.models = {};
 
+(function($) {
 
 ////////////
 // Screen //
 ////////////
 
-namespace.models.Screen = Backbone.Model.extend({
+wiz.models.Screen = Backbone.Model.extend({
   defaults: {
     chosen: false,
     title: "",
     description: "",
     buttons: [],
     Color: "#EEEEEE",
-    order: null
+    order: null,
+    next: undefined,
+    chosenResultText: ""
   },
 
   initialize: function() {
-
-    this.on('change:current', function(){
-
-      namespace.views.wizard.remove();    
-      // Initialize wizard again.
-      console.log("change event");
-      Backbone.trigger("current:update");
-      $(".wizard__content-block").html(namespace.views.wizard.render().el);
-
-    });
-
+    this.setNextScreen();
   },
 
-
+  setNextScreen: function() {
+    // Set the next screen, when we have that information available:
+    switch (this.get("buttons").length) {
+    case 1:
+    case 2:
+      if (this.get("buttons")[0]["Destination Screen"] !== undefined) {
+      var nid = this.get("buttons")[0]["Destination Screen"]["target_id"];
+      this.set({next: nid});
+      }
+      break;
+    }
+  }
 });
 
 
@@ -40,5 +44,6 @@ namespace.models.Screen = Backbone.Model.extend({
 // Section //
 /////////////
 
-namespace.models.Section = Backbone.Model.extend({});
+wiz.models.Section = Backbone.Model.extend({});
 
+})(jQuery);

@@ -2,63 +2,60 @@
 // Collections //
 /////////////////
 
-var namespace = namespace ||  {};
-namespace.collections = {}
+var wiz = wiz ||  {};
+wiz.collections = {}
 
-namespace.collections.Screens = Backbone.Collection.extend({
 
-  model: namespace.models.Screen,
+////////////////
+// Chosen     //
+////////////////
 
-  url: "http://localhost:3412",
+wiz.collections.Chosen = Backbone.Collection.extend ({
 
-  prev: function() {
-    if (namespace.controller.chosen.length > 1) {
-      namespace.controller.chosen.pop();
-      var m = this.find({current: true}), nm;
-      m.set({current: false});
-      nm = this.find({
-        Nid: _.last(namespace.controller.chosen)
-      });
-      namespace.views.wizard = new namespace.views.Wizard({
-        model: nm
-      });
-      nm.set({chosen: true,current: true});
-    }
-    this.logging();
+  model: wiz.models.Screen,
+  selected: false,
+  toggleSelected: function() {
+    this.selected = !this.selected;
   },
+});
 
-  next: function(bid) {
-    var m = this.find({current: true}), nm;
-    m.set({current: false});
-    // New model nm
-    nm = this.find({
-      Nid: m.get("buttons")[bid.charAt(bid.length - 1)]["Destination Screen"]["target_id"]
-    });
-    namespace.controller.chosen.push(nm.get("Nid"));
-    namespace.views.wizard = new namespace.views.Wizard({
-      model: nm
-    });    
-    nm.set({chosen: true, current: true, bid: bid});
-    this.logging();
-  },
+wiz.collections.chosen = new wiz.collections.Chosen();
 
-  getResults: function() {
-    return _.map(namespace.controller.chosen, function(s) {
-      var m;
-      m = this.find({
-        Nid: s
-      });      
-      console.log("m", m);
-      var bid = m.get("bid");
-      return m.get("buttons")[bid.charAt(bid.length - 1)]["Button Result Text"]["#markup"]; 
-      
+wiz.collections.chosen.on("add", function(m) {
 
-    }, this);
-  },
+  // Remove any existing wizard dom and events.
 
-  logging: function() {
-    console.log(namespace.controller.chosen);
-  },
+  // Trigger rendering of the newly added model.
+   var model = this.find({
+     Nid: m.get("Nid")
+   });
+  var view = new wiz.views.Wizard({
+    model: model
+  });
+  wiz.instance.goto(view);
+
+  // Let others know about it.
+  // Backbone.on("screen:add", this.render, this);
+});
+
+
+wiz.collections.Screens = Backbone.Collection.extend({
+
+  model: wiz.models.Screen,
+
+  url: "http://homer/api/json/business-portal-wizard",
+
+  // getResults: function() {
+  //   return _.map(wiz.controller.chosen, function(s) {
+  //     var m;
+  //     m = this.find({
+  //       Nid: s
+  //     });
+  //     console.log("m", m);
+  //     var bid = m.get("bid");
+  //     return m.get("buttons")[bid.charAt(bid.length - 1)]["Button Result Text"]["#markup"];
+  //   }, this);
+  // },
 
 });
 
@@ -67,12 +64,9 @@ namespace.collections.Screens = Backbone.Collection.extend({
 // Sections //
 //////////////
 
-namespace.collections.Sections = Backbone.Collection.extend({
-  model: namespace.models.Section
+wiz.collections.Sections = Backbone.Collection.extend({
+  model: wiz.models.Section
 
 });
 
-namespace.collections.sections = new namespace.collections.Sections();
-
-
-
+wiz.collections.sections = new wiz.collections.Sections();
