@@ -32,8 +32,7 @@ _.templateSettings = {
 
       transitionIn: function (callback) {
 
-        var view = this,
-            delay
+        var view = this, delay
 
         var transitionIn = function () {
           view.$el.addClass('is-visible');
@@ -133,7 +132,7 @@ wiz.views.App = wiz.extensions.View.extend({
         case "question":
           console.log("APP: question");
           var buttons = new wiz.views.Buttons({ model: this.model });
-          buttons.render();
+          this.$el.append(buttons.render().el);
           break;
         default:
           console.log("APP: No screen type defined");
@@ -190,7 +189,8 @@ wiz.views.IntroWithIllustration = Backbone.View.extend({
 /////////////
 
 wiz.views.Buttons = Backbone.View.extend({
-  el: ".wizard__buttons",
+  className: "wizard__buttons",
+  template: _.template($('#buttons').html()),
 
   render: function() {
     var buttons = this.model.get("buttons");
@@ -204,6 +204,8 @@ wiz.views.Buttons = Backbone.View.extend({
               index: index,
               className: "wizard__button"
             });
+            // @TODO fix so as to include wrapper.
+//           this.$el.html(this.template(this.model.toJSON()));
             this.$el.append(button.render().el);
           }
           if (b.Style["#markup"] === "Link") {
@@ -286,7 +288,7 @@ wiz.views.Button = Backbone.View.extend({
 
 wiz.views.Nav = Backbone.View.extend({
  
- className: ".wizard__nav",
+ className: "wizard__nav",
 
   initialize: function() {
 //    this.$el.find(".wizard__arrow-up").hide();
@@ -422,10 +424,9 @@ wiz.views.ProgressBar = Backbone.View.extend({
 
 wiz.views.ProgressDrawer = Backbone.View.extend({
 
-  el: ".wizard__progress-drawer",
+  el: "wizard__progress-drawer",
 
   initialize: function() {
-//    this.$el.hide();
     Backbone.on("screen:add", this.render, this);
   },
 
