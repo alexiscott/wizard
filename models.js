@@ -39,11 +39,4 @@ wiz.models.Screen = Backbone.Model.extend({
   }
 });
 
-
-/////////////
-// Section //
-/////////////
-
-wiz.models.Section = Backbone.Model.extend({});
-
 })(jQuery);

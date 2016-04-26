@@ -15,16 +15,7 @@
   <!-- ========= -->
 
 
-  <div id="wizard" class="wizard">
-      <div class="wizard__header"></div>
-      <div class="wizard__intro-block"></div>
-      <div class="wizard__tip">
-        <div class="wizard__tip_icon"></div>
-        <div class="wizard__tip_content">
-          <p class="wizard__tip_copy"></p>
-        </div>
-      </div>
-  </div> <!-- Close #wizard -->
+<div id="wizard" class="wizard"></div>
 
   <script type="text/template" id="header-template">
     <div class="wizard__header--title--government"> {{Name}}</div>
@@ -32,36 +23,83 @@
     <div class="wizard__header-line"></div>
   </script>
 
-  <script type="text/template" id="intro">
+  <script type="text/template" id="header-for-question-template">
+    <div class="wizard__header--title">{{Name}}</div>
+    <div class="wizard__header-line"></div>
+  </script>
+
+  <script type="text/template" id="intro-template">
     <div class="wizard__copy--section_intro">{{Description}}</div>
   </script>
 
-  <script type="text/template" id="intro-with-illustration">
+  <script type="text/template" id="intro-with-illustration-template">
     <div class="wizard__illustration"><img src="{{illustration}}"></div>
     <div class="wizard__copy--section_intro">{{Description}}</div>
   </script>
 
-  <script type="text/template" id="buttons">
-    <div class="wizard__buttons"></div>
-  </script>    
+  <script type="text/template" id="question-template">
+    <div class="wizard__question">{{title}}</div>
+  </script>
 
-  <script type="text/template" id="progress">
-    <div class="wizard__col_2">
-      <div class="wizard__progress-bar">
-        <div class="wizard__progress-bar-indicator">
-          <div class="wizard__progress-bar-icon"></div>
+  <script type="text/template" id="buttons-template">
+    <div class="wizard__buttons"></div>
+  </script>
+
+  <script type="text/template" id="wizard-nav-start-template">
+    <a href="#" class="wizard__arrow-down enabled">Next</a>
+  </script>
+
+  <script type="text/template" id="wizard-nav-section-template">
+    <a href="#" class="wizard__arrow-up">Previous</a>
+    <a href="#" class="wizard__arrow-down enabled">Next</a>
+  </script>
+
+
+  <script type="text/template" id="wizard-nav-question-template">
+    <a href="#" class="wizard__arrow-up">Previous</a>
+    <a href="#" class="wizard__arrow-down">Next</a>
+  </script>
+
+  <script type="text/template" id="wizard-nav-contextual-help-template">
+       <a href="#" class="wizard__arrow-up left enabled">Previous</a>
+      <span class="wizard__nav_label_help">Back to the question</span>
+  </script>
+
+  <script type="text/template" id="wizard-nav-start-over-template">
+    <div class="wizard__arrow-down-wrapper">
+       <a href="#" class="wizard__arrow-up"><img src="../images/wizard/arrow_left_enabled_desktop.png"></a>
+      <p class="wizard__nav_label_help">Start Over</p>
+    </div>
+  </script>
+
+  <script type="text/template" id="tip-template">
+      <div class="wizard__tip">
+        <div class="wizard__tip_icon"></div>
+        <div class="wizard__tip_content">
+          <div class="wizard__tip_copy">{{tip}}</div>
         </div>
-        <ul class="wizard__progress-drawer"></ul>
       </div>
+  </script>
+
+  <script type="text/template" id="results-template">
+    <div class="wizard__step"> step {{index}}<div>
+    <div class="wizard__result">{{result}}<div>
+  </script>
+
+
+  <script type="text/template" id="progress-bar-section-template">
+    <div class="wizard__progress-bar-section"></div>
+  </script>
+
+  <script type="text/template" id="progress-bar-section-with-icon-template">
+    <div class="wizard__progress-bar-section">
+     <img src="{{icon}}" />
     </div>
   </script>
 
   <script type="text/template" id="progress">
     <div class="wizard__nav"></div>
   </script>
-
-  </div> <!-- Close #wizard -->
-
 
   <!-- ========= -->
   <!-- Libraries -->
