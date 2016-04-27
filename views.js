@@ -108,11 +108,8 @@ wiz.views.App = wiz.extensions.View.extend({
         case "start":
           console.log("APP: Start");
 
-          var header = new wiz.views.Header({model: this.model});
-          this.$el.append(header.render().el);
-
-          var intro = new wiz.views.Intro({ model: this.model });
-          this.$el.append(intro.render().el);
+          var start = new wiz.views.Start({model: this.model});
+          this.$el.append(start.render().el);
 
           var nav = new wiz.views.Nav({model: this.model});
           this.$el.append(nav.render().el);
@@ -154,11 +151,8 @@ wiz.views.App = wiz.extensions.View.extend({
         case "contextual help":
           console.log("APP: contextual help");
 
-          var header = new wiz.views.Header({model: this.model});
+          var header = new wiz.views.HeaderForContextual({model: this.model});
           this.$el.append(header.render().el);
-
-          var intro = new wiz.views.IntroWithIllustration({ model: this.model });
-          this.$el.append(intro.render().el);
 
           var nav = new wiz.views.Nav({model: this.model});
           this.$el.append(nav.render().el);
@@ -196,7 +190,7 @@ wiz.views.App = wiz.extensions.View.extend({
           var intro = new wiz.views.Intro({ model: this.model });
           this.$el.append(intro.render().el);
 
-          var nav = new wiz.views.Nav({model: this.model});
+          var nav = new wiz.views.NavForAddress({model: this.model});
           this.$el.append(nav.render().el);
 
           break;
@@ -244,6 +238,19 @@ wiz.views.HeaderForQuestion = Backbone.View.extend({
   }
 });
 
+/////////////////////////
+// Header for context  //
+/////////////////////////
+
+wiz.views.HeaderForContextual = Backbone.View.extend({
+  className: ".wizard__header constrained",
+  template: _.template($('#header-for-contextual-template').html()),
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
+});
+
 ///////////
 // Intro //
 ///////////
@@ -251,6 +258,19 @@ wiz.views.HeaderForQuestion = Backbone.View.extend({
 wiz.views.Intro = Backbone.View.extend({
   className: ".wizard__intro-block constrained",
   template: _.template($('#intro-template').html()),
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
+});
+
+///////////
+// Start //
+///////////
+
+wiz.views.Start = Backbone.View.extend({
+  className: ".wizard__intro-block constrained",
+  template: _.template($('#start-template').html()),
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
@@ -491,6 +511,35 @@ wiz.views.Nav = Backbone.View.extend({
 
 wiz.views.NavStart = Backbone.View.extend({
   template: _.template($('#wizard-nav-start-template').html()),
+  render: function() {
+    this.$el.html(this.template());
+    return this;
+  }
+});
+
+/////////////////
+// NAV ADDRESS //
+/////////////////
+
+wiz.views.NavForAddress = Backbone.View.extend({
+  template: _.template($('#wizard-nav-address-template').html()),
+  events:  {
+    "click .wizard__address_back_button": "backArrowClick"
+  },
+  backArrowClick: function() {
+
+    if (wiz.collections.chosen.length > 1) {
+      var last = wiz.collections.chosen.last();
+      wiz.collections.chosen.remove(last);
+
+      var view = new wiz.views.Wizard({
+        model:  wiz.collections.chosen.last()
+      });
+      wiz.instance.goto(view);
+    }
+
+    event.preventDefault();
+  },
   render: function() {
     this.$el.html(this.template());
     return this;
