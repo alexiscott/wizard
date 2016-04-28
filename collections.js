@@ -41,6 +41,7 @@ wiz.collections.chosen.on("add", function(m) {
    var model = this.find({
      Nid: m.get("Nid")
    });
+
   var view = new wiz.views.Wizard({
     model: model
   });
@@ -59,22 +60,6 @@ wiz.collections.Screens = Backbone.Collection.extend({
 
   url: "http://homer/api/json/business-portal-wizard",
 
-  getSectionIcons: function() {
-    return _.chain(this.models).map(
-      function(m) {
-        var re = /^\d+/i;
-        if (m.get("Name").match(re)) {
-          return m.get("Name")
-        }
-      }).filter(_.identity).unique().sort().value();
-  },
-
-  getSectionIds: function() {
-    return _.map(this.getSectionIcons(), function(i) {
-      return i;
-    }, this);
-  },
-
   getSections: function() {
     return _.chain(
       wiz.collections.screens.models).map(
@@ -82,6 +67,7 @@ wiz.collections.Screens = Backbone.Collection.extend({
         var name = m.get("Name");
         var tid = m.get("section").tid;
         var icon = m.get("icon");
+        var jurisdiction = m.get("jurisdiction");
         var id = name.charAt(0);
         var re = /^\d+/i;
         if (id.match(re)) {
@@ -102,6 +88,13 @@ wiz.collections.Screens = Backbone.Collection.extend({
           function(o) {
             return o.id;
           }).value();
-  }
+  },
 
+  getScreensBySectionId: function(sectionId) {
+    return  _.filter(this.models, function(s){
+      // console.log("screen", s.get("section").tid);
+      // console.log("section id", sectionId);
+      return s.get("section").tid === sectionId;
+    }, this);
+  }
 });

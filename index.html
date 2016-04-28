@@ -121,9 +121,19 @@
     </div>
   </script>
 
-  <script type="text/template" id="progress">
-    <div class="wizard__nav"></div>
+  <script type="text/template" id="progress-drawer-contents-template">
+    <div class="wizard__progress-drawer-contents-section">
+      <p class="wizard__progress-bar_government">{{jurisdiction}}</p>
+      <p class="wizard__progress-bar_section_title">{{name}}</p>
+    </div>
   </script>
+
+  <script type="text/template" id="progress-drawer-status-icons-template">
+    <div class="wizard__progress-bar_icon--completed"></div>
+    <div class="wizard__progress-bar_icon--selected"></div>
+  </script>
+
+
 
   <!-- ========= -->
   <!-- Libraries -->
