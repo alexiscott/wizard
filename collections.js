@@ -46,10 +46,7 @@ wiz.collections.chosen.on("add", function(m) {
     model: model
   });
 
-  wiz.instance.goto(view);
-
-  // Let others know about it.
-  // Backbone.on("screen:add", this.render, this);
+  showView(view, "wiz");
 
 });
 

@@ -4,9 +4,6 @@ var wiz = wiz || {};
 (function($) {
   $( document ).ready(function() {
 
-
-    window.wiz.instance = new wiz.views.App();
-
     // Initialize collections
     wiz.collections.screens = new wiz.collections.Screens();
 

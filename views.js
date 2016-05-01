@@ -1,6 +1,5 @@
 var wiz = wiz || {};
 wiz.views = {};
-wiz.extensions = {};
 
 // User moustachs style templates.
 _.templateSettings = {
@@ -8,93 +7,37 @@ _.templateSettings = {
 
 };
 
+function showView(view, element) {
+  if (window.currentView){
+//    window.currentView.remove();
+  }
+
+  window.currentView = view;
+  window.currentView.render();
+
+  console.log("current", window.currentView.el);
+  $("#wizard").append(window.currentView.el);
+
+  //console.log("element", element);
+  if (element !== undefined) {
+
+  } else {
+//    element.append(this.currentView.el);
+  }
+  
+};
+
 
 (function($) {
   $( document ).ready(function() {
 
-    ////////////////
-    // Extensions //
-    ////////////////
-
-    wiz.extensions.View = Backbone.View.extend({
-
-      render: function(options) {
-
-        options = options || {};
-
-        if (options.page === true) {
-          this.$el.addClass('page');
-        }
-
-        return this;
-
-      },
-
-      transitionIn: function (callback) {
-
-        var view = this, delay
-
-        var transitionIn = function () {
-          view.$el.addClass('is-visible');
-          //console.log("transition", callback);
-          view.$el.one('transitionend', function () {
-            if (_.isFunction(callback)) {
-              callback();
-            }
-          })
-        };
-
-        _.delay(transitionIn, 20);
-
-      },
-
-      transitionOut: function (callback) {
-
-        var view = this;
-
-        view.$el.removeClass('is-visible');
-        view.$el.one('transitionend', function () {
-          if (_.isFunction(callback)) {
-            callback();
-          };
-        });
-
-      }
-
-    });
-
-
-    /////////
-    // APP //
-    /////////
-
-    wiz.views.App = wiz.extensions.View.extend({
-      el: "#wizard",
-
-      goto: function (view) {
-
-        var previous = this.currentPage || null;
-        var next = view;
-
-        if (previous) {
-          previous.transitionOut(function () {
-            previous.remove();
-          });
-        }
-
-        next.render({ page: true });
-        this.$el.append( next.$el );
-        next.transitionIn();
-        this.currentPage = next;
-      }
-    });
 
 
     ////////////
     // Wizard //
     ////////////
 
-    wiz.views.Wizard = wiz.extensions.View.extend({
+    wiz.views.Wizard = Backbone.View.extend({
 
       className: "wiz",
 
@@ -114,113 +57,16 @@ _.templateSettings = {
       render: function() {
 
         // Styles for all sections:
-        this.$el.css("background", "#" + this.model.get("Primary Color"));
-
-
-        switch (this.model.get("screen-type")) {
-        case "start":
-          console.log("APP: Start");
+          $("#wizard").css("background", "#" + this.model.get("Primary Color"));
 
           var start = new wiz.views.Start({model: this.model});
-          this.$el.append(start.render().el);
+        //  this.$el.append(start.render().el);
+        showView(start, this.$el);
 
-          var nav = new wiz.views.Nav({model: this.model});
-          this.$el.append(nav.render().el);
-          break;
-        case "section":
-          console.log("APP: Section");
-
-          var header = new wiz.views.Header({model: this.model});
-          this.$el.append(header.render().el);
-
-          var intro = new wiz.views.IntroWithIllustration({ model: this.model });
-          this.$el.append(intro.render().el);
-
-          var nav = new wiz.views.Nav({model: this.model});
-          this.$el.append(nav.render().el);
-
-          break;
-        case "question":
-          console.log("APP: question");
-
-          var headerForQuestion = new wiz.views.HeaderForQuestion({model: this.model});
-          this.$el.append(headerForQuestion.render().el);
-
-          var question = new wiz.views.Question({model: this.model});
-          this.$el.append(question.render().el);
-
-          var buttons = new wiz.views.Buttons({ model: this.model });
-          this.$el.append(buttons.render().el);
-
-          var tip = new wiz.views.Tip({model: this.model});
-          this.$el.append(tip.render().el);
-
-          var linkButton = new wiz.views.ButtonLink({ model: this.model });
-          this.$el.append(linkButton.render().el);
-
-          var nav = new wiz.views.Nav({model: this.model});
-          this.$el.append(nav.render().el);
-          break;
-        case "contextual help":
-          console.log("APP: contextual help");
-
-          var header = new wiz.views.HeaderForContextual({model: this.model});
-          this.$el.append(header.render().el);
-
-          var nav = new wiz.views.Nav({model: this.model});
-          this.$el.append(nav.render().el);
-          break;
-
-        case "confirmation":
-          console.log("APP: confirmation");
-
-          var header = new wiz.views.Header({model: this.model});
-          this.$el.append(header.render().el);
-
-          var question = new wiz.views.Question({model: this.model});
-          this.$el.append(question.render().el);
-
-          var intro = new wiz.views.IntroWithIllustration({ model: this.model });
-          this.$el.append(intro.render().el);
-
-          var results = new wiz.views.ResultsView({model: this.model});
-          this.$el.append(results.render().el);
-
-          var nav = new wiz.views.NavStartOver({model: this.model});
-          this.$el.append(nav.render().el);
-          break;
-
-        case "address lookup":
-          console.log("APP: address lookup");
-          console.log(this.model);
-
-          var headerForQuestion = new wiz.views.HeaderForQuestion({model: this.model});
-          this.$el.append(headerForQuestion.render().el);
-
-          var question = new wiz.views.Question({model: this.model});
-          this.$el.append(question.render().el);
-
-          var intro = new wiz.views.Intro({ model: this.model });
-          this.$el.append(intro.render().el);
-
-          var nav = new wiz.views.NavForAddress({model: this.model});
-          this.$el.append(nav.render().el);
-
-          break;
-
-        default:
-          console.log("APP: No screen type defined", this.model.get("screen-type") );
-          break;
-        }
+        var nav = new wiz.views.Nav({model: this.model});
+        showView(nav, this.$el);
 
 
-        var bar = new wiz.views.ProgressBar({model: this.model});
-        this.$el.append(bar.render().el);
-
-        var drawer = new wiz.views.ProgressDrawer({model: this.model});
-        this.$el.append(drawer.render().el);
-
-        return wiz.extensions.View.prototype.render.apply(this, arguments);
       }
     });
 
@@ -268,7 +114,7 @@ _.templateSettings = {
     ///////////
 
     wiz.views.Intro = Backbone.View.extend({
-      className: ".wizard__intro-block constrained",
+      className: "wizard__intro-block constrained",
       template: _.template($('#intro-template').html()),
       render: function() {
         this.$el.html(this.template(this.model.toJSON()));
