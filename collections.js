@@ -12,23 +12,19 @@ wiz.collections = {}
 
 wiz.collections.Chosen = Backbone.Collection.extend ({
 
-  model: wiz.models.Screen,
-  selected: false,
-  toggleSelected: function() {
-    this.selected = !this.selected;
-  },
+    model: wiz.models.Screen,
 
-  getResults: function() {
-    return _.chain(this.models).map(function(m) {
-      if (m.get("buttons") !== undefined) {
-        if (m.get("chosenBid") !== undefined) {
-          if (m.get("buttons")[m.get("chosenBid")]["Button Result Text"] !== undefined) {
-            return m.get("buttons")[m.get("chosenBid")]["Button Result Text"]["#markup"];
-          }
-        }
-      }
-    }, this).filter(_.identity).value();
-  }
+    getResults: function () {
+        return _.chain(this.models).map(function (m) {
+            if (m.get("buttons") !== undefined) {
+                if (m.get("chosenBid") !== undefined) {
+                    if (m.get("buttons")[m.get("chosenBid")]["Button Result Text"] !== undefined) {
+                      return m.get("buttons")[m.get("chosenBid")];
+                    }
+                }
+            }
+        }, this).filter(_.identity).value();
+    }
 });
 
 wiz.collections.chosen = new wiz.collections.Chosen({});
@@ -41,12 +37,12 @@ wiz.collections.chosen.on("add", function(m) {
    var model = this.find({
      Nid: m.get("Nid")
    });
-
-  var view = new wiz.views.Wizard({
+  wiz.wizard = new wiz.views.Wizard({
     model: model
   });
 
-  showView(view, "wiz");
+  wiz.instance.goto(wiz.wizard);
+
 
 });
 
@@ -55,7 +51,23 @@ wiz.collections.Screens = Backbone.Collection.extend({
 
   model: wiz.models.Screen,
 
-  url: "http://homer/api/json/business-portal-wizard",
+  url: "/api/json/business-portal-wizard",
+
+  getSectionIcons: function() {
+    return _.chain(this.models).map(
+      function(m) {
+        var re = /^\d+/i;
+        if (m.get("Name").match(re)) {
+          return m.get("Name")
+        }
+      }).filter(_.identity).unique().sort().value();
+  },
+
+  getSectionIds: function() {
+    return _.map(this.getSectionIcons(), function(i) {
+      return i;
+    }, this);
+  },
 
   getSections: function() {
     return _.chain(
@@ -64,7 +76,6 @@ wiz.collections.Screens = Backbone.Collection.extend({
         var name = m.get("Name");
         var tid = m.get("section").tid;
         var icon = m.get("icon");
-        var jurisdiction = m.get("jurisdiction");
         var id = name.charAt(0);
         var re = /^\d+/i;
         if (id.match(re)) {
@@ -85,13 +96,6 @@ wiz.collections.Screens = Backbone.Collection.extend({
           function(o) {
             return o.id;
           }).value();
-  },
-
-  getScreensBySectionId: function(sectionId) {
-    return  _.filter(this.models, function(s){
-      // console.log("screen", s.get("section").tid);
-      // console.log("section id", sectionId);
-      return s.get("section").tid === sectionId;
-    }, this);
   }
+
 });

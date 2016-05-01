@@ -16,15 +16,45 @@ wiz.models.Screen = Backbone.Model.extend({
     description: "",
     buttons: [],
     Color: "#EEEEEE",
-    order: null,
     next: undefined,
-    chosenResultText: ""
+    chosenResultText: "",
+    selected: false
   },
 
   initialize: function() {
     this.setNextScreen();
   },
 
+  controlSelected: function (bidString) {
+    var storedBid = this.get("chosenBid");
+    var bid = bidString.charAt(bidString.length -1);
+    if (bid !== storedBid) {
+      this.set({
+        selected: true,
+        storedBid: bid
+      });
+    }
+    if (bid === storedBid) {
+      this.set({selected: !this.get("selected")});
+    }
+  },
+
+  // This is called when a button is clicked on.
+  setNext(bidString) {
+    var bid = bidString.charAt(bidString.length -1);
+    if (this.get("buttons")[bid]["Destination Screen"] !== undefined) {
+      var nid = this.get("buttons")[bid]["Destination Screen"]["target_id"];
+    } else {
+      console.log("APP: Destination screen not defined: ", this.get("buttons"));
+      return;
+    }
+    this.set({
+      next: nid,
+      chosenBid: bid,
+    });
+  },
+
+  // This is called on model initialising.
   setNextScreen: function() {
     // Set the next screen, when we have that information available:
     switch (this.get("buttons").length) {
@@ -36,7 +66,8 @@ wiz.models.Screen = Backbone.Model.extend({
       }
       break;
     }
-  }
+  },
+
 });
 
 })(jQuery);

@@ -4,6 +4,9 @@ var wiz = wiz || {};
 (function($) {
   $( document ).ready(function() {
 
+
+    window.wiz.instance = new wiz.views.App();
+
     // Initialize collections
     wiz.collections.screens = new wiz.collections.Screens();
 
@@ -16,7 +19,7 @@ var wiz = wiz || {};
         // Add the start screen to the chosen collection.
         var m = wiz.collections.screens.find({"screen-type": "start"}, this);
         if (m === undefined) {
-          console.log("APP ERROR: You will need a start screen defined.");
+          console.log("APP ERROR: Start screen undefined.");
           return;
         } else {
           wiz.collections.chosen.add(m);
@@ -24,7 +27,7 @@ var wiz = wiz || {};
       },
 
       error: function(collection, response, options) {
-        console.log("Fetch error: ")
+        console.log("Fetch error")
       }
 
     });
