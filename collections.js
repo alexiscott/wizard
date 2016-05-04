@@ -50,8 +50,8 @@ wiz.collections.chosen.on("add", function(m) {
 wiz.collections.Screens = Backbone.Collection.extend({
 
   model: wiz.models.Screen,
-//  url: "http://localhost:3412",
-  url: "http://homer/api/json/business-portal-wizard",
+  url: "http://localhost:3412",
+  // url: "http://homer/api/json/business-portal-wizard",
 
   getSectionIcons: function() {
     return _.chain(this.models).map(
