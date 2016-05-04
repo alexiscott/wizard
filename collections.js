@@ -31,8 +31,6 @@ wiz.collections.chosen = new wiz.collections.Chosen({});
 
 wiz.collections.chosen.on("add", function(m) {
 
-  // Remove any existing wizard dom and events.
-
   // Trigger rendering of the newly added model.
    var model = this.find({
      Nid: m.get("Nid")
@@ -42,8 +40,6 @@ wiz.collections.chosen.on("add", function(m) {
   });
 
   wiz.instance.goto(wiz.wizard);
-
-
 });
 
 

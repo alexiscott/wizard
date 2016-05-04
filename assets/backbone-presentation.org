@@ -1,24 +1,61 @@
-*  App starts
-When the app starts all the screens are loaded into the screens collection. Screens are just another word for Drupal nodes. 
+* Why backbone?
+- Separation of model data from HTML. We get individal models where the node data is stored. Much easier to reason about. MVC.
+- We can see the data easily in the console, and run queries on it
+- Also underscore, which is a requirement, and offers templating, so we can keep our HTML readable and editable. 
+- Underscore gives us a load of vary useful methods for querying collections etc.
+* App loading.
 
+** Loads the one view that hangs around and is kind of controller like, that is it is not handling presentation data directly.
 * Fetch
- Backbone uses the fetch command, making a request to an API that returns JSON. This aspect was built by April using the services module and a view that returns fields from the nodes. The output looks something like this.
+
+- Backbone uses the fetch command, making a request to an API that returns JSON. 
+
+- This aspect was built by April using the services module and a view that returns fields from the nodes. The output looks something like this.
+
+- Examples
 http://localhost:3412/
 http://homer/api/json/business-portal-wizard
 
-*  The addition of the first model
+* The addition of the first model
+
 This causes an event to be fired that renders the first screen.
+The screen model is defined in model.js. We can look at models in the console.
+
+* Loading the wizard view.
+
+** We load the view, first removing any other views and events that have been loaded.
 
 * Next arrow
-When the nex arrow is clicked then the models next screen is added to the currently "chosen collection". This addition again causes a new wizard view to to be rendered. We also remove the previous one.
 
-* Button selected.
-If a button is selected then a selected flag is set on the model, and a chosenBid is also set referencing the target ID. This is useful as it identifies the choice that the user has made when it comes to generating the results at the end of the wizard, and it also is used when the wizard next arrow is clocked. We can see those details in the console. by looking at wiz.collections.chosen.model.get("chosenBid") for example.
+** When the next arrow is clicked then the models next screen is added to the currently "chosen collection". This addition again causes a new wizard view to to be rendered. We also remove the previous one.
 
-* Back arrow. 
+* Button selected
+
+If a button is selected then a selected flag is set on the model, and a chosenBid is also set referencing the target Button Id.
+
+This is useful as it identifies the choice that the user has made when it comes to generating the results at the end of the wizard, and it also is used when the wizard next arrow is clocked. 
+
+We can see those details in the console. by looking at wiz.collections.chosen.model.get("chosenBid") for example.
+
+We also make some UI changes adding and removing classed.
+
+* Back arrow
+** Where the back arrow is clicked:
+- remove last chosen collection item.
+- Load the last remaining item in the wizard collection.
+
+* Results
+Get screens from the chosen collection, where:
+- buttonId is set
+- And there is result markup
+- Use underscore sort by, identity, and chaining.
 
 
 
 
 
 
+* Afterthought
+I would like to use it again for any code that needs data separation, and a neat component approach to views. and I would be interested in:
+- getting a better understanding of views management and avoiding memory leaks.  Possible using it with react replacing the views layer.
+- Work with storing data to local storage and router usage which I believe it can handle well.
