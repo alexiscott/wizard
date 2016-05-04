@@ -1,0 +1,24 @@
+*  App starts
+When the app starts all the screens are loaded into the screens collection. Screens are just another word for Drupal nodes. 
+
+* Fetch
+ Backbone uses the fetch command, making a request to an API that returns JSON. This aspect was built by April using the services module and a view that returns fields from the nodes. The output looks something like this.
+http://localhost:3412/
+http://homer/api/json/business-portal-wizard
+
+*  The addition of the first model
+This causes an event to be fired that renders the first screen.
+
+* Next arrow
+When the nex arrow is clicked then the models next screen is added to the currently "chosen collection". This addition again causes a new wizard view to to be rendered. We also remove the previous one.
+
+* Button selected.
+If a button is selected then a selected flag is set on the model, and a chosenBid is also set referencing the target ID. This is useful as it identifies the choice that the user has made when it comes to generating the results at the end of the wizard, and it also is used when the wizard next arrow is clocked. We can see those details in the console. by looking at wiz.collections.chosen.model.get("chosenBid") for example.
+
+* Back arrow. 
+
+
+
+
+
+
