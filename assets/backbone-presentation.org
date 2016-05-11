@@ -18,7 +18,7 @@ http://homer/api/json/business-portal-wizard
 
 * The addition of the first model
 
-This causes an event to be fired that renders the first screen.
+This causes an "on" add event to be fired that renders the first screen.
 The screen model is defined in model.js. We can look at models in the console.
 
 * Loading the wizard view.
@@ -49,7 +49,6 @@ Get screens from the chosen collection, where:
 - buttonId is set
 - And there is result markup
 - Use underscore sort by, identity, and chaining.
-
 
 
 

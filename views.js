@@ -63,30 +63,30 @@ _.templateSettings = {
     });
 
 
-/////////
-// APP //
-/////////
+    /////////
+    // APP //
+    /////////
 
-wiz.views.App = wiz.extensions.View.extend({
-  el: "#wizard",
+    wiz.views.App = wiz.extensions.View.extend({
+      el: "#wizard",
 
-  goto: function (view) {
+      goto: function (view) {
 
-    var previous = this.currentPage || null;
-    var next = view;
+        var previous = this.currentPage || null;
+        var next = view;
 
-    if (previous) {
-      previous.transitionOut(function () {
-        previous.remove();
-      });
-    }
+        if (previous) {
+          previous.transitionOut(function () {
+            previous.remove();
+          });
+        }
 
-    next.render({ page: true });
-    this.$el.html( next.$el );
-    next.transitionIn();
-    this.currentPage = next;
-  }
-});
+        next.render({ page: true });
+        this.$el.html( next.$el );
+        next.transitionIn();
+        this.currentPage = next;
+      }
+    });
 
 
     ////////////
