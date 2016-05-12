@@ -1,0 +1,23 @@
+{
+  "name": "wizard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexiscott/wizard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexiscott/wizard/issues"
+  },
+  "homepage": "https://github.com/alexiscott/wizard#readme",
+  "dependencies": {
+    "eslint": "^2.9.0"
+  }
+}

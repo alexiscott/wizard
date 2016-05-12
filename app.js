@@ -1,9 +1,8 @@
-
 var wiz = wiz || {};
 
-(function($) {
-  $( document ).ready(function() {
-
+(function ($) {
+  'use strict';
+  $(document).ready(function () {
 
     window.wiz.instance = new wiz.views.App();
 
@@ -14,20 +13,21 @@ var wiz = wiz || {};
 
       async: false,
 
-      success: function(data) {
+      success: function (data) {
 
         // Add the start screen to the chosen collection.
-        var m = wiz.collections.screens.find({"screen-type": "start"}, this);
-        if (m === undefined) {
-          console.log("APP ERROR: Start screen undefined.");
+        var m = wiz.collections.screens.find({'screen-type': 'start'}, this);
+        if (_.isUndefined(m)) {
           return;
-        } else {
+        }
+        else {
           wiz.collections.chosen.add(m);
         }
       },
 
-      error: function(collection, response, options) {
-        console.log("Fetch error")
+      error: function (collection, response, options) {
+        return;
+        // handle error.
       }
 
     });
